@@ -1,0 +1,48 @@
+<%- include("header") -%>
+
+  <div id="login-box">
+      <form action="/login" method="POST">
+          <label for="username">Type in your username here:</label>
+          <input type="text" class="form-control" name="username" id="username" placeholder="username">
+          <label for="password">Type in your password here: <%= url %> </label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="password">
+          <!-- <button onClick="login(event)" class="btn btn-primary">Login</button> -->
+          <input type="submit" class="btn btn-primary" value="Login">
+      </form>
+      <a href="/registration" class="btn btn-success ml-2">Register here</a>
+  </div>
+  
+  <script>
+    const login = async e =>{
+        e.preventDefault();
+        console.log("___________________ \n\n");
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        console.log(username, password)
+
+        const option = {
+            headers:{
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            mode: 'cors',
+            body: JSON.stringify({
+                username: "username",
+                password: "password"
+            }),
+            redirect: "follow"
+        }    
+          
+        // fetching data
+        await fetch(`<%= url %>`, option)
+            .then(res => {
+              console.log("res.url");
+              return res.redirected && ( location.href = res.url )
+            })
+            .catch(err => alert('Something happen wrong!'));
+        // return res.json();
+    }
+  </script>
+
+<%- include("footer") -%>

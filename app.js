@@ -2,11 +2,13 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const mysql = require("mysql")
+const mysql = require("mysql");
 const app = express();
+const path = require("path");
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static("public"));
 
 var mysqlConnection = mysql.createConnection({
@@ -27,9 +29,27 @@ mysqlConnection.connect((err) => {
 
 
 app.get("/", function (req, res) {
+  res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
+});
 
-  console.log("test")
+app.post('/login', (req, res) => {
+  // const username="RR";
+  // const password="BBB";
+  const {username, password} = req.body;
+  console.log(req.body);
+  // console.log(req);
+  // if (false)
+  res.redirect(301, `/dashboard/${username}`);
+});
 
+app.get("/registration", function(req, res) {
+  res.render("registration");
+});
+
+app.get("/dashboard/:username", (req,res) => {
+  const{username} = req.params;
+  console.log("username", username);
+  res.render(path.join(__dirname, "views/dashboard.ejs"), {username:username});
 });
 
 // app.get("/:customListName", function (req, res) {
@@ -48,7 +68,7 @@ app.get("/", function (req, res) {
 //       } else {
 //         //Show an existing list
 
-//         res.render("list", { listTitle: foundList.name, newListItems: foundList.items });
+//         res.render("contoh", { listTitle: foundList.name, newListItems: foundList.items });
 //       }
 //     }
 //   });
