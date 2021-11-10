@@ -1,0 +1,175 @@
+body{
+  font-family: "Montserrat";
+}
+
+.header{
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1% 3%;
+
+}
+
+.transfer-icon{
+  font-size: 100%;
+}
+
+h2,h6{
+  margin: 0%;
+  font-weight: bold;
+}
+
+hr{
+  margin: 0% 3%;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main{
+  width: 100%;
+  height: 100%;
+  padding: 0% 3% 1% 3%
+}
+
+.account-card {
+  width: 250px;
+  height: 150px;
+  border-radius: 15px;
+  margin-top: 1%;
+  margin-right: 1%;
+  border: 1px solid black;
+  display: inline;
+  padding: 1%;
+}
+
+.cards-container{
+  display: flex;
+  overflow-x: scroll;
+  justify-content: space-between;
+}
+
+.accounts-section{
+  margin-top: 2%
+}
+
+.transactions-section{
+  margin-top: 2%;
+}
+
+.transaction{
+  width: 100%;
+  height: 75px;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin-top: 1%;
+  padding: 1%;
+  display:flex;
+  justify-content: space-between;
+}
+
+
+
+p{
+  margin: 0%;
+}
+
+.account-balance{
+  margin: 3.5% auto;
+  font-size: 300%;
+}
+
+.account-number{
+  font-size: 75%;
+}
+
+.transaction-name{
+  font-size: 150%;
+}
+
+.transaction-date{
+  font-size: 75%;
+}
+
+.transaction-amount{
+  font-size: 175%;
+}
+
+.filter-section{
+  width: 70%;
+  margin: 2% auto 0%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter{
+  width: 21%;
+}
+
+.filter-time{
+  width:13%
+}
+
+.input-time-container{
+  margin-top: 7.5%;
+}
+
+.input-amount-container{
+  margin-top: 7.5%;
+}
+
+input{
+  display: inline;
+}
+
+.filter-amount-display{
+  margin: 0%;
+  font-size: 75%;
+  display: inline;
+}
+
+.personal-data-section{
+  width: 100%;
+  height: 300px;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin-top: 2%;
+  padding: 1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.personal-detail{
+  margin: 1% 0%
+}
+
+.login-detail{
+  margin: 1% 0%
+
+}
+
+.login-data-section{
+  width: 100%;
+  height: 120px;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin-top: 2%;
+  padding: 1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.short-hr {
+  margin: 2% 30% 0%;
+  /* width: 100%; */
+}
+
+.btn-change-password{
+  display: block;
+  margin: 2% auto;
+}
