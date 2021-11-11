@@ -68,7 +68,7 @@ mysqlConnection.connect((err) => {
     console.log('Connection Established Successfully');
     mysqlConnection.query(createdb,function(err,result){
       if (!err)
-      console.log("Successfully created tables");
+      console.log("Successfully created table");
       else
       console.log(err);
     })
@@ -89,7 +89,22 @@ app.post('/login', (req, res) => {
   console.log(req.body);
   // console.log(req);
   // if (false)
-  res.redirect(301, `/dashboard/${username}`);
+
+  var verifyUser = `SELECT username FROM Customer WHERE username="`+username+`" AND password="`+password+`";`
+  mysqlConnection.query(verifyUser,function(err,result){
+    if (!err) {
+      if (result.length>0){
+        res.redirect(301, `/dashboard/${username}`);
+      }
+      else{
+        console.log("Wrong username and/or password");
+        res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
+      }
+    }
+    else{
+      console.log(err);
+    }
+  })
 });
 
 app.get("/registration", function(req, res) {
