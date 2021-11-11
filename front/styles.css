@@ -173,3 +173,41 @@ input{
   display: block;
   margin: 2% auto;
 }
+
+.pay-section{
+  width: 50%;
+  height: 500px;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin: 2% auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1%;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.pay-detail{
+  margin: 5% auto;
+  width: 45%;
+  height: 50px;
+}
+
+.pay-detail label{
+  float: left;
+}
+
+.pay-detail input{
+  float: right;
+}
+
+.pay-detail select{
+  float: right;
+  width: 215px;
+}
+
+.btn-pay{
+  width: 15%;
+  margin: 2% auto;
+  display: block;
+}
