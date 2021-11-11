@@ -90,10 +90,16 @@ app.post('/login', (req, res) => {
   // console.log(req);
   // if (false)
 
-  var verifyUser = `SELECT username FROM Customer WHERE username="`+username+`" AND password="`+password+`";`
+  var verifyUser = `SELECT customer_id FROM Customer WHERE username="`+username+`" AND password="`+password+`";`
   mysqlConnection.query(verifyUser,function(err,result){
     if (!err) {
       if (result.length>0){
+        var customer_id = result[0].customer_id;
+        var addToLoginHistory = `
+        INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now());
+        UPDATE Customer SET last_login = now() WHERE customer_id =`+customer_id+`;`
+        console.log(addToLoginHistory);
+        mysqlConnection.query(addToLoginHistory,function(err,result){});
         res.redirect(301, `/dashboard/${username}`);
       }
       else{
