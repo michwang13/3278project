@@ -16,13 +16,63 @@ var mysqlConnection = mysql.createConnection({
   port: '3306',
   user: 'admin',
   password: '12345678',
-  // database: 'learner',
-  // multipleStatements: true
+  multipleStatements: true
 });
 
+var createdb = `
+use project;
+CREATE TABLE if not exists Customer (
+  customer_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  birthdate VARCHAR(255),
+  email VARCHAR(255),
+  last_login TIMESTAMP,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE if not exists CustomerPhoneNumber (
+  customer_id INT PRIMARY KEY,
+  phone_number VARCHAR(255),
+  FOREIGN KEY(customer_id) REFERENCES Customer(customer_id)
+);
+
+CREATE TABLE if not exists CustomerLoginHistory (
+  customer_id INT PRIMARY KEY,
+  login_history DATETIME,
+  FOREIGN KEY(customer_id) REFERENCES Customer(customer_id)
+);
+
+CREATE TABLE if not exists Account (
+  account_num INT AUTO_INCREMENT PRIMARY KEY,
+  account_type VARCHAR(255),
+  currency VARCHAR(255),
+  balance FLOAT(3),
+  customer_id  INT,
+  FOREIGN KEY(customer_id) REFERENCES Customer(customer_id)
+);
+
+CREATE TABLE if not exists Transaction (
+  transaction_id INT PRIMARY KEY,
+  amount FLOAT(3),
+  time DATETIME,
+  from_account INT,
+  to_account INT,
+  FOREIGN KEY(from_account) REFERENCES Account(account_num),
+  FOREIGN KEY(to_account) REFERENCES Account(account_num)
+);
+`
 mysqlConnection.connect((err) => {
   if (!err)
+  {
     console.log('Connection Established Successfully');
+    mysqlConnection.query(createdb,function(err,result){
+      if (!err)
+      console.log("Successfully created tables");
+      else
+      console.log(err);
+    })
+  }
   else
     console.log('Connection Failed!' + JSON.stringify(err, undefined, 2));
 });
@@ -47,9 +97,23 @@ app.get("/registration", function(req, res) {
 });
 
 app.get("/dashboard/:username", (req,res) => {
+  // console.log(req.params);
   const{username} = req.params;
-  console.log("username", username);
-  res.render(path.join(__dirname, "views/dashboard.ejs"), {username:username});
+  // console.log("username", username);
+
+  var getUsername = `SELECT name FROM Customer WHERE username="`+username+`";`;
+  var name ="";
+
+  mysqlConnection.query(getUsername,function(err,result){
+    if (!err)
+    {
+      name = result[0].name;
+      console.log(name);
+      res.render(path.join(__dirname, "views/dashboard.ejs"), {username:name});
+    }
+    else
+    console.log(err);
+  })
 });
 
 // app.get("/:customListName", function (req, res) {
