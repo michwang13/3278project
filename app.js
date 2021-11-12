@@ -9,7 +9,7 @@ const path = require("path");
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static(__dirname + '/public'));
 
 var mysqlConnection = mysql.createConnection({
   host: 'project3278.cl8tabhuzbu5.us-east-2.rds.amazonaws.com',
