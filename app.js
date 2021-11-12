@@ -61,7 +61,6 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(from_account) REFERENCES Account(account_num),
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
-SELECT @@global.time_zone, @@session.time_zone;
 `
 mysqlConnection.connect((err) => {
   if (!err)
@@ -69,8 +68,7 @@ mysqlConnection.connect((err) => {
     console.log('Connection Established Successfully');
     mysqlConnection.query(createdb,function(err,result){
       if (!err)
-      // console.log("Successfully created table");
-      console.log(result);
+      console.log("Successfully created table");
       else
       console.log(err);
     })
@@ -121,9 +119,46 @@ app.get("/registration", function(req, res) {
 });
 
 app.post("/registration", function(req, res) {
-  const {username, password, firstName, lastName, birthDate, email, phone, address} = req.body;
-  console.log(req.body);
-  res.redirect(301, "/");
+  const {username, password, fullName, birthDate, email, phone} = req.body;
+  var registerCustomer = `
+  INSERT INTO Customer (name,birthdate,email,last_login,username,password)VALUES ("${fullName}","${birthDate}","${email}","","${username}","${password}");
+  `
+  mysqlConnection.query(registerCustomer,function(err,result){
+    if (!err)
+    {
+      mysqlConnection.query(`SELECT customer_id FROM Customer WHERE username="${username}";`,function(err,result){
+        if (!err)
+        {
+          var customer_id = result[0].customer_id;
+          if (typeof phone === 'string')
+          {
+            mysqlConnection.query(`INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phone}");`,function(err,result){
+              if (err)
+              console.log(err);
+            })
+          }
+          else
+          {
+            for (var i=0;i<phone.length;i++){
+              var addPhoneNumber = `INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phone[i]}");`
+              mysqlConnection.query(addPhoneNumber,function(err,result){
+                if (err)
+                console.log(err);
+              });
+            }
+          }
+          res.redirect(301, "/");
+        }
+      })
+    }
+    else
+    {
+      res.render("registration");
+      console.log(err);
+    }
+
+  });
+  // console.log(req.body);
 });
 
 app.get("/dashboard/:username", (req,res) => {

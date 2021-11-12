@@ -33,6 +33,8 @@
         <input type="text" class="form-control" name="fullName" placeholder="first name (e.g. John)">
         <label for="birthDate">Birth Date:</label>
         <input type="date" class="form-control" name="birthDate" value="2000-01-01" min="1900-01-01" max="2003-01-01">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" name="email" placeholder="Email Address">
         <label for="phone">Phone Number:</label>
         <div id="phoneInputs">
           <input type="text" class="form-control" name="phone" placeholder="phone number">
@@ -42,6 +44,7 @@
         <div id="hideButton" class="btn btn-primary btn-circle btn-md hide">-</div>
         
         <!-- <button onClick="login(event)" class="btn btn-primary mb-3">Login</button> -->
+        <p id="usernameTaken" style="display:hidden">Username is taken!</p>
         <input type="submit" value="Register" class="btn btn-primary">
     </form>
   </div>
