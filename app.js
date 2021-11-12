@@ -32,13 +32,13 @@ CREATE TABLE if not exists Customer (
 );
 
 CREATE TABLE if not exists CustomerPhoneNumber (
-  customer_id INT PRIMARY KEY,
+  customer_id INT,
   phone_number VARCHAR(255),
   FOREIGN KEY(customer_id) REFERENCES Customer(customer_id)
 );
 
 CREATE TABLE if not exists CustomerLoginHistory (
-  customer_id INT PRIMARY KEY,
+  customer_id INT,
   login_history DATETIME,
   FOREIGN KEY(customer_id) REFERENCES Customer(customer_id)
 );
@@ -61,6 +61,7 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(from_account) REFERENCES Account(account_num),
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
+SELECT @@global.time_zone, @@session.time_zone;
 `
 mysqlConnection.connect((err) => {
   if (!err)
@@ -68,7 +69,8 @@ mysqlConnection.connect((err) => {
     console.log('Connection Established Successfully');
     mysqlConnection.query(createdb,function(err,result){
       if (!err)
-      console.log("Successfully created table");
+      // console.log("Successfully created table");
+      console.log(result);
       else
       console.log(err);
     })
@@ -82,11 +84,12 @@ app.get("/", function (req, res) {
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
 });
 
+
 app.post('/login', (req, res) => {
   // const username="RR";
   // const password="BBB";
   const {username, password} = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   // console.log(req);
   // if (false)
 
@@ -98,7 +101,7 @@ app.post('/login', (req, res) => {
         var addToLoginHistory = `
         INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now());
         UPDATE Customer SET last_login = now() WHERE customer_id =`+customer_id+`;`
-        console.log(addToLoginHistory);
+        // console.log(addToLoginHistory);
         mysqlConnection.query(addToLoginHistory,function(err,result){});
         res.redirect(301, `/dashboard/${username}`);
       }
@@ -117,20 +120,22 @@ app.get("/registration", function(req, res) {
   res.render("registration");
 });
 
+
 app.get("/dashboard/:username", (req,res) => {
   // console.log(req.params);
   const{username} = req.params;
   // console.log("username", username);
 
-  var getUsername = `SELECT name FROM Customer WHERE username="`+username+`";`;
+  var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
+  var lastLogin="";
 
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
       name = result[0].name;
-      console.log(name);
-      res.render(path.join(__dirname, "views/dashboard.ejs"), {username:name});
+      lastLogin = result[0].last_login;
+      res.render(path.join(__dirname, "views/dashboard.ejs"), {username:name, lastLogin: lastLogin});
     }
     else
     console.log(err);

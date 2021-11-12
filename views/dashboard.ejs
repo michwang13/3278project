@@ -1,3 +1,105 @@
 <%- include("header") -%>
-<h2>Welcome back, <%= username %>!</h2> 
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+    <div class="sidebar-header">
+        <h3>Payy</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li class="active">
+        <a href="#" data-toggle="collapse" aria-expanded="false">Dashboard</a> <!-- ejs, js -->
+        </li>
+        <li>
+        <a href="#">Transactions</a> <!-- ejs, js -->
+        </li>
+        <li>
+        <a href="#">Profile</a> <!-- ejs, js -->
+        </li>
+    </ul>
+
+    <div class="sidebar-bottom">
+        <ul class="list-unstyled CTAs">
+        <li>
+            <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Logout</a>
+        </li>
+        </ul>
+        <h4>Last Login: <%= lastLogin %></h4>
+    </div>
+    </nav>
+
+
+    <!-- Page Content  -->
+    <div id="content">
+
+    <section class="header">
+        <button type="button" id="sidebarCollapse" class="btn btn-secondary">
+        <i class="fas fa-bars"></i>
+        </button>
+        <h2>Hi, <%= username %> </h2> <!-- ejs -->
+        <button type="button" class="btn btn-secondary btn-md download-button"> <i
+            class="transfer-icon fas fa-exchange-alt"></i>
+        Pay</button>
+
+    </section>
+    <hr>
+
+    <section class="main">
+
+        <!-- boleh kita assume <= 5 accounts guys? -->
+        <section class="accounts-section">
+        <h6><u>Accounts</u></h6>
+        <div class="cards-container">
+            <!-- ejs -->
+            <div class="account-card">
+            <p class="account-title">HKD Savings</p>
+            <p class="account-balance">$10,000</p>
+            <p class="account-number">1234567890</p>
+            </div>
+            <div class="account-card"></div>
+            <div class="account-card"></div>
+            <div class="account-card"></div>
+            <div class="account-card"></div>
+        </div>
+        </section>
+
+        <section class="transactions-section">
+        <h6><u>Transactions</u></h6>
+        <div class="transactions-container">
+            <!-- ejs -->
+            <div class="transaction">
+            <div class="transaction-name-date-container">
+                <p class="transaction-name">Schneiders</p>
+                <p class="transaction-date">27/10/2001</p>
+            </div>
+            <div class="transaction-amount-container">
+                <p class="transaction-amount">+$500</p>
+            </div>
+            </div>
+            <div class="transaction"></div>
+            <div class="transaction"></div>
+            <div class="transaction"></div>
+        </div>
+        </section>
+
+
+    </section>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    $("#sidebar").mCustomScrollbar({
+        theme: "minimal"
+    });
+
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar, #content').toggleClass('active');
+        $('.collapse.in').toggleClass('in');
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        console.log("test")
+    });
+    });
+</script>
 <% include("footer") %> 
