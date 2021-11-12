@@ -93,7 +93,7 @@ app.post('/login', (req, res) => {
   // console.log(req);
   // if (false)
 
-  var verifyUser = `SELECT customer_id FROM Customer WHERE username="`+username+`" AND password="`+password+`";`
+  var verifyUser = `SELECT customer_id FROM Customer WHERE username="${username}" AND password="${password}";`;
   mysqlConnection.query(verifyUser,function(err,result){
     if (!err) {
       if (result.length>0){
@@ -120,10 +120,16 @@ app.get("/registration", function(req, res) {
   res.render("registration");
 });
 
+app.post("/registration", function(req, res) {
+  const {username, password, firstName, lastName, birthDate, email, phone, address} = req.body;
+  console.log(req.body);
+  res.redirect(301, "/");
+});
 
 app.get("/dashboard/:username", (req,res) => {
   // console.log(req.params);
   const{username} = req.params;
+  // console.log(req.body);
   // console.log("username", username);
 
   var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
