@@ -3,7 +3,7 @@
   <div id="login-box">
       <form action="/login" method="POST">
           <label for="username">Type in your username here:</label>
-          <input type="text" class="form-control" name="username" id="username" placeholder="username">
+          <input type="text" class="form-control" name="username" id="username" placeholder="username" value = "<%= locals.username %> ">
           <label for="password">Type in your password here: <%= url %> </label>
           <input type="password" class="form-control" name="password" id="password" placeholder="password">
           <!-- <button onClick="login(event)" class="btn btn-primary">Login</button> -->

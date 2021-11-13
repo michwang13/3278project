@@ -8,13 +8,13 @@
 
     <ul class="list-unstyled components">
         <li class="active">
-        <a href="#" data-toggle="collapse" aria-expanded="false">Dashboard</a> <!-- ejs, js -->
+        <a href="#">Dashboard</a> <!-- ejs, js -->
         </li>
         <li>
-        <a href="#">Transactions</a> <!-- ejs, js -->
+        <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
         </li>
         <li>
-        <a href="#">Profile</a> <!-- ejs, js -->
+        <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
         </li>
     </ul>
 
@@ -36,7 +36,7 @@
         <button type="button" id="sidebarCollapse" class="btn btn-secondary">
         <i class="fas fa-bars"></i>
         </button>
-        <h2>Hi, <%= username %> </h2> <!-- ejs -->
+        <h2>Hi, <%= name %> </h2> <!-- ejs -->
         <button type="button" class="btn btn-secondary btn-md download-button"> <i
             class="transfer-icon fas fa-exchange-alt"></i>
         Pay</button>

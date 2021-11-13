@@ -107,7 +107,7 @@ app.post('/login', (req, res) => {
       }
       else{
         console.log("Wrong username and/or password");
-        res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
+        res.render(path.join(__dirname, "views/login.ejs") , {url: '/login', username: req.body.username});
       }
     }
     else{
@@ -135,18 +135,56 @@ app.get("/dashboard/:username", (req,res) => {
   var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
-
+  console.log(__dirname);
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
       name = result[0].name;
       lastLogin = result[0].last_login;
-      res.render(path.join(__dirname, "views/dashboard.ejs"), {username:name, lastLogin: lastLogin});
+      res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, dir: __dirname});
     }
     else
     console.log(err);
   })
 });
+
+app.get("/transactions/:username", (req,res) => {
+  const {username} = req.params;
+  console.log(username);
+  var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
+  var name ="";
+  var lastLogin="";
+  mysqlConnection.query(getUsername,function(err,result){
+    if (!err)
+    {
+      name = result[0].name;
+      lastLogin = result[0].last_login;
+      res.render(path.join(__dirname, "views/transactions.ejs"), {username, name, lastLogin: lastLogin});
+    }
+    else
+    console.log(err);
+  })
+})
+
+app.get("/profile/:username", (req,res) => {
+  const {username} = req.params;
+  console.log(username);
+  var getUsername = `SELECT name,last_login,birthdate,email FROM Customer WHERE username="`+username+`";`;
+  var name ="";
+  var lastLogin="";
+  mysqlConnection.query(getUsername,function(err,result){
+    if (!err)
+    {
+      name = result[0].name;
+      birthdate = result[0].birthdate;
+      email = result[0].email;
+      lastLogin = result[0].last_login;
+      res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email});
+    }
+    else
+    console.log(err);
+  })
+})
 
 // app.get("/:customListName", function (req, res) {
 //   const customListName = _.capitalize(req.params.customListName);
