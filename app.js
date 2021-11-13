@@ -44,7 +44,7 @@ CREATE TABLE if not exists CustomerLoginHistory (
 );
 
 CREATE TABLE if not exists Account (
-  account_num INT AUTO_INCREMENT PRIMARY KEY,
+  account_num INT PRIMARY KEY,
   account_type VARCHAR(255),
   currency VARCHAR(255),
   balance FLOAT(3),
@@ -53,7 +53,7 @@ CREATE TABLE if not exists Account (
 );
 
 CREATE TABLE if not exists Transaction (
-  transaction_id INT PRIMARY KEY,
+  transaction_id INT AUTO_INCREMENT PRIMARY KEY,
   amount FLOAT(3),
   time DATETIME,
   from_account INT,
@@ -62,6 +62,16 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
 `
+
+// INSERT INTO Transaction (amount,time,from_account,to_account) VALUES 
+// (500,"2021-11-14 00:00:00",0,619),
+// (1000,"2021-11-12 12:51:03",639,456),
+// (1500,"2021-11-15 07:01:02",619,0);
+// INSERT INTO Account (account_num,account_type,currency,balance,customer_id) VALUES 
+// (123,"Savings","HKD",15000,27),
+// (456,"Current","HKD",5000,27),
+// (789,"Savings","USD",900,27),
+// (000,"Current","USD",200,27);
 mysqlConnection.connect((err) => {
   if (!err)
   {
@@ -167,7 +177,7 @@ app.get("/dashboard/:username", (req,res) => {
   // console.log(req.body);
   // console.log("username", username);
 
-  var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
+  var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
   console.log(__dirname);
@@ -176,7 +186,21 @@ app.get("/dashboard/:username", (req,res) => {
     {
       name = result[0].name;
       lastLogin = result[0].last_login;
-      res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, dir: __dirname});
+      customer_id = result[0].customer_id;
+      mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
+        if (!err)
+        {
+          var accounts = result;
+          var getTransaction = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc LIMIT 4;`
+          mysqlConnection.query(getTransaction,function(err,result){
+            if (!err) {
+              var transactions = result;
+              res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, accounts: accounts, transactions: transactions,dir: __dirname});
+
+            }
+          })
+        }
+      })
     }
     else
     console.log(err);
@@ -186,7 +210,7 @@ app.get("/dashboard/:username", (req,res) => {
 app.get("/transactions/:username", (req,res) => {
   const {username} = req.params;
   console.log(username);
-  var getUsername = `SELECT name,last_login FROM Customer WHERE username="`+username+`";`;
+  var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
   mysqlConnection.query(getUsername,function(err,result){
@@ -194,7 +218,12 @@ app.get("/transactions/:username", (req,res) => {
     {
       name = result[0].name;
       lastLogin = result[0].last_login;
-      res.render(path.join(__dirname, "views/transactions.ejs"), {username, name, lastLogin: lastLogin});
+      customer_id = result[0].customer_id;
+      var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`
+      mysqlConnection.query(getTransactions, function(err, result) {
+        var transactions = result;
+        res.render(path.join(__dirname, "views/transactions.ejs"), {username:name, lastLogin: lastLogin, transactions:transactions});
+      })
     }
     else
     console.log(err);
@@ -204,17 +233,23 @@ app.get("/transactions/:username", (req,res) => {
 app.get("/profile/:username", (req,res) => {
   const {username} = req.params;
   console.log(username);
-  var getUsername = `SELECT name,last_login,birthdate,email FROM Customer WHERE username="`+username+`";`;
+  var getUsername = `SELECT customer_id,name,last_login,birthdate,email FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
+      customer_id = result[0].customer_id;
       name = result[0].name;
       birthdate = result[0].birthdate;
       email = result[0].email;
       lastLogin = result[0].last_login;
-      res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email});
+      mysqlConnection.query(`SELECT phone_number from CustomerPhoneNumber WHERE customer_id="${customer_id}";`,function(err,result){
+        if (!err)
+        console.log(result);
+        res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, numPhone: result});
+      })
+      // res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email});
     }
     else
     console.log(err);

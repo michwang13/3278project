@@ -71,23 +71,22 @@
 
         <!-- ejs -->
         <div class="transactions-section">
-          <h6><u>Today</u></h6>
-          <div class="transactions-container">
-            <div class="transaction">
-              <div class="transaction-name-date-container">
-                <p class="transaction-name">Schneiders</p>
-                <p class="transaction-date">27/10/2001</p>
-              </div>
-              <div class="transaction-amount-container">
-                <p class="transaction-amount">+$500</p>
+          <h6><u>All Transactions</u></h6>
+          <% for (var transaction of transactions){ %>
+            <div class="transactions-container">
+              <div class="transaction">
+                <div class="transaction-name-date-container">
+                  <p class="transaction-name"><%=transaction.transaction_id%></p>
+                  <p class="transaction-date"><%=transaction.time%></p>
+                </div>
+                <div class="transaction-amount-container">
+                  <p class="transaction-amount"><%=transaction.amount%></p>
+                </div>
               </div>
             </div>
-            <div class="transaction"></div>
-            <div class="transaction"></div>
-            <div class="transaction"></div>
-          </div>
+          <%}%>
         </div>
-
+<!-- 
         <div class="transactions-section">
           <h6><u>11/11/2011</u></h6>
           <div class="transactions-container">
@@ -104,7 +103,7 @@
             <div class="transaction"></div>
             <div class="transaction"></div>
           </div>
-        </div>
+        </div> -->
 
 
 

@@ -47,20 +47,22 @@
           <p class="personal-detail">Name: <%= name %> </p> <!-- ejs -->
           <p class="personal-detail">Birth date: <%= birthdate %> </p> <!-- ejs -->
           <p class="personal-detail">Email: <%= email %> </p> <!-- ejs -->
-          <p class="personal-detail">Phone:</p> <!-- ejs -->
-          <p class="personal-detail">Email Address:</p> <!-- ejs -->
+          <p class="personal-detail">Phone Numbers:</p> <!-- ejs -->
+          <% for (var phone of numPhone){ %>
+            <p><%=phone.phone_number%></p>
+          <%}%>
         </div>
 
         <hr class="short-hr">
 
         <div class="login-data-section">
           <p class="login-detail">Username: <%= username %> </p> <!-- ejs -->
-          <p class="login-detail">Password: <%= password %> </p> <!-- ejs -->
         </div>
 
         <button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i
             class="fas fa-key"></i>
-          Change Password</button>
+          Change Password
+        </button>
 
 
       </section>
