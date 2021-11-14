@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>comp3278</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Font Awesome -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+    integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+    crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+  <!-- Bootstrap Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="registration-message-container">
+    <img src="azbank_logo.png" alt="">
+    <h3>Sign up to AZ Bank!</h3>
+  </div>
+
+  <div class="registration-container">
+    <form action="/registration" method="POST">
+      <div class="registration-details-container">
+        <div class="registration-details-bio-container">
+          <div>
+            <p>Full Name</p>
+            <input type="text" class="form-control registration-input" name="fullName" id="fullName">
+          </div>
+          <div>
+            <p>Birth Date</p>
+            <input type="date" class="form-control registration-input" name="birthDate" id="birthDate" min="1980-01-01"
+              max="2021-12-31" style="width:300px">
+          </div>
+          <div>
+            <p>Email</p>
+            <input type="text" class="form-control registration-input" name="email" id="email">
+          </div>
+          <div>
+            <p>Phone Numbers</p>
+            <input type="text" class="form-control registration-input" name="phoneNumbers" id="phoneNumbers"
+              placeholder="12345678, 87654321, ...">
+            <!-- 52741755, 58212342, 51239567 terus diformat pake js buat dipisahin-->
+          </div>
+        </div>
+        <div class="vertical-line-parent">
+          <div class="vertical-line"></div>
+        </div>
+        <div class="registration-details-username-password-button-container">
+          <div class="registration-details-username-password-container">
+            <div>
+              <p>Choose a Username</p>
+              <input type="text" class="form-control registration-input" name="username" id="username">
+            </div>
+            <div>
+              <p>Choose a Password</p>
+              <input type="password" class="form-control registration-input" name="password" id="password">
+            </div>
+          </div>
+          <div class="login-button-container">
+            <input type="submit" class="btn btn-secondary btn-md download-button" value="Sign up">
+            <div class="already-have-an-account-container">
+              <a href="">I already have an account</a> <!-- redirect ke log in -->
+            </div>
+          </div>
+        </div>
+    </form>
+  </div>
+
+</body>
+
+</html>
