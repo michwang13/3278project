@@ -1,106 +1,133 @@
 <%- include("header") -%>
-<div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-    <div class="sidebar-header">
-        <h3>Payy</h3>
-    </div>
-
-    <ul class="list-unstyled components">
-        <li class="active">
-        <a href="#">Dashboard</a> <!-- ejs, js -->
-        </li>
-        <li>
-        <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
-        </li>
-        <li>
-        <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
-        </li>
-    </ul>
-
-    <div class="sidebar-bottom">
-        <ul class="list-unstyled CTAs">
-        <li>
-            <a href="../" class="download">Logout</a>
-        </li>
-        </ul>
-        <h4>Last Login: <%= lastLogin %></h4>
-    </div>
-    </nav>
-
-
-    <!-- Page Content  -->
-    <div id="content">
-
-    <section class="header">
-        <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-        <i class="fas fa-bars"></i>
-        </button>
-        <h2>Hi, <%= name %> </h2> <!-- ejs -->
-        <button type="button" class="btn btn-secondary btn-md download-button"> <i
-            class="transfer-icon fas fa-exchange-alt"></i>
-        <a href="../pay/<%=username%>">Pay</a></button>
-
-    </section>
-    <hr>
-
-    <section class="main">
-
-        <section class="accounts-section">
-        <h6><u>Accounts</u></h6>
-        <div class="cards-container">
-            <!-- ejs -->
-            <% for (var account of accounts){ %>
-                <div class="account-card">
-                    <p class="account-title"><%=account.currency%> <%=account.account_type%></p>
-                    <p class="account-balance">$<%=account.balance%></p>
-                    <p class="account-number"><%=account.account_num%></p>
-                    </div>
-              <%}%>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <div class="sidebar-header">
+            <img src="azbank_logo.png" alt="">
+            <div>
+                <h3>AZ Bank</h3>
+            </div>
         </div>
-        </section>
 
-        <section class="transactions-section">
-        <h6><u>Recent Transactions</u></h6>
+        <div class="dashboard-element-container">
 
-        <div class="transactions-container">
-            <!-- ejs -->
-            <% for (var transaction of transactions){ %>
-                <div class="transaction">
-                    <div class="transaction-name-date-container">
-                        <p class="transaction-name"><%=transaction.transaction_id%></p>
-                        <p class="transaction-date"><%=transaction.time%></p>
+            <div class="sidebar-top">
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#">Dashboard</a> <!-- ejs, js -->
+                    </li>
+                    <li>
+                        <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
+                    </li>
+                    <li>
+                        <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
+                    </li>
+                </ul>
+            </div>
+
+
+
+
+            <div class="sidebar-bottom">
+                <ul class="list-unstyled CTAs">
+                    <li id="li-logout">
+                        <a href="../" class="download">Logout</a>
+                    </li>
+                </ul>
+                <p>Last Login: <%= lastLogin %>
+                </p>
+
+            </div>
+
+        </div>
+
+        </nav>
+
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <section class="header">
+                <button type="button" id="sidebarCollapse" class="btn btn-secondary">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Hi, <%= name %>
+                </h2> <!-- ejs -->
+                <button type="button" class="btn btn-secondary btn-md download-button"> <i
+                        class="transfer-icon fas fa-exchange-alt"></i>
+                    <a href="../pay/<%=username%>">Pay</a></button>
+
+            </section>
+            <hr>
+
+            <section class="main">
+
+                <section class="accounts-section">
+                    <h6><u>Accounts</u></h6>
+                    <div class="cards-container">
+                        <!-- ejs -->
+                        <% for (var account of accounts){ %>
+                            <div class="account-card">
+                                <p class="account-title">
+                                    <%=account.currency%>
+                                        <%=account.account_type%>
+                                </p>
+                                <p class="account-balance">$<%=account.balance%>
+                                </p>
+                                <p class="account-number">
+                                    <%=account.account_num%>
+                                </p>
+                            </div>
+                            <%}%>
                     </div>
-                    <div class="transaction-amount-container">
-                        <p class="transaction-amount"><%=transaction.amount%></p>
-                    </div>
-                </div>
-                <%}%>
-<!-- 
+                </section>
+
+                <section class="transactions-section">
+                    <h6><u>Recent Transactions</u></h6>
+
+                    <div class="transactions-container">
+                        <!-- ejs -->
+                        <% for (var transaction of transactions){ %>
+                            <div class="transaction">
+                                <div class="transaction-name-date-container">
+                                    <p class="transaction-name">
+                                        <%=transaction.transaction_id%>
+                                    </p>
+                                    <p class="transaction-date">
+                                        <%=transaction.time%>
+                                    </p>
+                                </div>
+                                <div class="transaction-amount-container">
+                                    <p class="transaction-amount">
+                                        <%=transaction.amount%>
+                                    </p>
+                                </div>
+                            </div>
+                            <%}%>
+                                <!-- 
             <div class="transaction"></div>
             <div class="transaction"></div>
             <div class="transaction"></div> -->
+                    </div>
+                </section>
+
+
+            </section>
         </div>
-        </section>
 
-
-    </section>
     </div>
 
-</div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
 
-<script type="text/javascript">
-    $(document).ready(function () {
-    $("#sidebar").mCustomScrollbar({
-        theme: "minimal"
-    });
-
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar, #content').toggleClass('active');
-        $('.collapse.in').toggleClass('in');
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        console.log("test")
-    });
-    });
-</script>
-<% include("footer") %> 
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                console.log("test")
+            });
+        });
+    </script>
+    <% include("footer") %>
