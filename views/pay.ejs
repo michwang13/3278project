@@ -5,29 +5,41 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
       <div class="sidebar-header">
-        <h3>Payy</h3>
+        <img src="/images/azbank_logo.png" alt="">
+        <div>
+          <h3>AZ Bank</h3>
+        </div>
+      </div>
+      <div class="dashboard-element-container">
+
+        <div class="sidebar-top">
+          <ul class="list-unstyled components">
+            <li class="active">
+              <a href="#">Dashboard</a> <!-- ejs, js -->
+            </li>
+            <li>
+              <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
+            </li>
+            <li>
+              <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="sidebar-bottom">
+          <ul class="list-unstyled CTAs">
+            <li class="li-logout">
+              <a href="../" class="download">Logout</a>
+            </li>
+          </ul>
+          <p>Last Login: <%= lastLogin %>
+          </p>
+        </div>
       </div>
 
-      <ul class="list-unstyled components">
-        <li class="active">
-          <a href="#" data-toggle="collapse" aria-expanded="false">Dashboard</a> <!-- ejs, js -->
-        </li>
-        <li>
-          <a href="#">Transactions</a> <!-- ejs, js -->
-        </li>
-        <li>
-          <a href="#">Profile</a> <!-- ejs, js -->
-        </li>
-      </ul>
-
-      <div class="sidebar-bottom">
-        <ul class="list-unstyled CTAs">
-          <li>
-            <a href="../" class="download">Logout</a>
-          </li>
-        </ul>
-      </div>
     </nav>
+
 
 
     <!-- Page Content  -->
@@ -47,30 +59,33 @@
 
       <section class="main">
         <form action="/pay/<%=username%>" method="POST">
-            <div class="pay-detail">
-              <label for="fromAccount">From Account</label>
-              <select name="fromAccount" id="fromAccount">
-                <option value="" disabled selected>Select Account</option>
-                <% for (var account of accounts){ %>
-                  <div class="account-card">
-                      <option value="<%=account.account_num%>"><%=account.currency%> <%=account.account_type%></option> <!-- ejs -->
-                  </div>
+          <div class="pay-detail">
+            <label for="fromAccount">From Account</label>
+            <select name="fromAccount" id="fromAccount">
+              <option value="" disabled selected>Select Account</option>
+              <% for (var account of accounts){ %>
+                <div class="account-card">
+                  <option value="<%=account.account_num%>">
+                    <%=account.currency%>
+                      <%=account.account_type%>
+                  </option> <!-- ejs -->
+                </div>
                 <%}%>
-              </select>
-            </div>
-            <div class="pay-detail">
-              <label for="toAccount">To Account</label>
-              <input type="number" name="toAccount" id="toAccount" class="form-control"
-                placeholder="Enter Account Number">
-            </div>
-            <div class="pay-detail">
-              <label for="amount">Amount</label>
-              <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter Amount">
-            </div>
-            <!-- <button type="button" class="btn btn-secondary btn-md btn-pay download-button"> <i
+            </select>
+          </div>
+          <div class="pay-detail">
+            <label for="toAccount">To Account</label>
+            <input type="number" name="toAccount" id="toAccount" class="form-control"
+              placeholder="Enter Account Number">
+          </div>
+          <div class="pay-detail">
+            <label for="amount">Amount</label>
+            <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter Amount">
+          </div>
+          <!-- <button type="button" class="btn btn-secondary btn-md btn-pay download-button"> <i
                 class="transfer-icon fas fa-exchange-alt"></i>
               Pay</button> -->
-              <input type="submit" value="Pay" id="payButton" class="btn btn-secondary btn-md btn-pay download-button"> 
+          <input type="submit" value="Pay" id="payButton" class="btn btn-secondary btn-md btn-pay download-button">
         </form>
 
       </section>
@@ -96,4 +111,4 @@
     // })
   </script>
 
-<% include("footer") %> 
+  <% include("footer") %>

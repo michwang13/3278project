@@ -1,44 +1,40 @@
 <%- include("header") -%>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <div class="sidebar-header">
-            <img src="azbank_logo.png" alt="">
-            <div>
-                <h3>AZ Bank</h3>
-            </div>
-        </div>
-
-        <div class="dashboard-element-container">
-
-            <div class="sidebar-top">
-                <ul class="list-unstyled components">
-                    <li class="active">
-                        <a href="#">Dashboard</a> <!-- ejs, js -->
-                    </li>
-                    <li>
-                        <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
-                    </li>
-                    <li>
-                        <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
-                    </li>
-                </ul>
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <img src="/images/azbank_logo.png" alt="">
+                <div>
+                    <h3>AZ Bank</h3>
+                </div>
             </div>
 
-            <div class="sidebar-bottom">
-                <ul class="list-unstyled CTAs">
-                    <li id="li-logout">
-                        <a href="../" class="download">Logout</a>
-                    </li>
-                </ul>
-                <p>Last Login: <%= lastLogin %>
-                </p>
+            <div class="dashboard-element-container">
+                <div class="sidebar-top">
+                    <ul class="list-unstyled components">
+                        <li class="active">
+                            <a href="#">Dashboard</a> <!-- ejs, js -->
+                        </li>
+                        <li>
+                            <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
+                        </li>
+                        <li>
+                            <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
+                        </li>
+                    </ul>
+                </div>
 
+                <div class="sidebar-bottom">
+                    <ul class="list-unstyled CTAs">
+                        <li class="li-logout">
+                            <a href="../" class="download">Logout</a>
+                        </li>
+                    </ul>
+                    <p>Last Login: <%= lastLogin %>
+                    </p>
+                </div>
             </div>
-
-        </div>
-
         </nav>
-
 
         <!-- Page Content  -->
         <div id="content">
@@ -59,7 +55,7 @@
             <section class="main">
 
                 <section class="accounts-section">
-                    <h6><u>Accounts</u></h6>
+                    <h6>Accounts</h6>
                     <div class="cards-container">
                         <!-- ejs -->
                         <% for (var account of accounts){ %>
@@ -79,7 +75,7 @@
                 </section>
 
                 <section class="transactions-section">
-                    <h6><u>Recent Transactions</u></h6>
+                    <h6>Recent Transactions</h6>
 
                     <div class="transactions-container">
                         <!-- ejs -->

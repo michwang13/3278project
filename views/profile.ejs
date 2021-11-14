@@ -4,29 +4,39 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
       <div class="sidebar-header">
-        <h3>Payy</h3>
+        <img src="/images/azbank_logo.png" alt="">
+        <div>
+          <h3>AZ Bank</h3>
+        </div>
       </div>
 
-      <ul class="list-unstyled components">
-        <li>
-          <a href="../dashboard/<%= username %>">Dashboard</a> <!-- ejs, js -->
-        </li>
-        <li>
-          <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
-        </li>
-        <li class="active">
-          <a href="#">Profile</a> <!-- ejs, js -->
-        </li>
-      </ul>
+      <div class="dashboard-element-container">
+        <div class="sidebar-top">
+          <ul class="list-unstyled components">
+            <li class="active">
+              <a href="#">Dashboard</a> <!-- ejs, js -->
+            </li>
+            <li>
+              <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
+            </li>
+            <li>
+              <a href="../profile/<%= username %>">Profile</a> <!-- ejs, js -->
+            </li>
+          </ul>
+        </div>
 
-      <div class="sidebar-bottom">
-        <ul class="list-unstyled CTAs">
-          <li>
-            <a href="../" class="download">Logout</a>
-          </li>
-        </ul>
+        <div class="sidebar-bottom">
+          <ul class="list-unstyled CTAs">
+            <li class="li-logout">
+              <a href="../" class="download">Logout</a>
+            </li>
+          </ul>
+          <p>Last Login: <%= lastLogin %>
+          </p>
+        </div>
       </div>
     </nav>
+
 
 
     <!-- Page Content  -->
@@ -44,19 +54,25 @@
       <section class="main">
 
         <div class="personal-data-section">
-          <p class="personal-detail">Name: <%= name %> </p> <!-- ejs -->
-          <p class="personal-detail">Birth date: <%= birthdate %> </p> <!-- ejs -->
-          <p class="personal-detail">Email: <%= email %> </p> <!-- ejs -->
+          <p class="personal-detail">Name: <%= name %>
+          </p> <!-- ejs -->
+          <p class="personal-detail">Birth date: <%= birthdate %>
+          </p> <!-- ejs -->
+          <p class="personal-detail">Email: <%= email %>
+          </p> <!-- ejs -->
           <p class="personal-detail">Phone Numbers:</p> <!-- ejs -->
           <% for (var phone of numPhone){ %>
-            <p><%=phone.phone_number%></p>
-          <%}%>
+            <p>
+              <%=phone.phone_number%>
+            </p>
+            <%}%>
         </div>
 
         <hr class="short-hr">
 
         <div class="login-data-section">
-          <p class="login-detail">Username: <%= username %> </p> <!-- ejs -->
+          <p class="login-detail">Username: <%= username %>
+          </p> <!-- ejs -->
         </div>
 
         <button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i
@@ -85,4 +101,4 @@
       });
     });
   </script>
-<% include("footer") %> 
+  <% include("footer") %>
