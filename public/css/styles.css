@@ -79,6 +79,22 @@ input[type="text"] {
   width: 313px;
 } */
 
+.login-container{
+  background-color: #36CF9A;
+  /* box-shadow: 1px 1px 2px 1px #C0C0C0; */
+  box-shadow: 2px 2px 3px #C0C0C0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  /* -1/2 width */
+  margin-top: -150px;
+  /* -1/2 height */
+  border-radius: 15px;
+}
+
 input[type="text"]:focus {
 	outline: none;
 	box-shadow: inset 0 -3px 0 0 #a683e3;
@@ -95,9 +111,6 @@ footer {
 	text-align: center;
 }
 
-body {
-	background-color:#ffffff;
-}
 
 #login-box {
 	top: 50%;
@@ -116,6 +129,7 @@ input {
 }
 
 body{
+	background-color:#ffffff;
   font-family: "Montserrat";
   color: #0B0E26;
 }
@@ -238,12 +252,20 @@ p{
   justify-content: space-between;
 }
 
-.filter{
-  width: 21%;
+.filter-section div{
+  text-align: center;
+}
+
+.filter-date{
+  width: 20%;
 }
 
 .filter-time{
-  width:13%
+  width: 20%;
+}
+
+.filter-amount{
+  width: 25%;
 }
 
 .input-time-container{
@@ -252,7 +274,15 @@ p{
 
 .input-amount-container{
   margin-top: 7.5%;
+  display: flex;
 }
+
+.filter-amount-display-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 
 input{
   display: inline;
@@ -268,33 +298,48 @@ input{
   width: 100%;
   height: 300px;
   border-radius: 15px;
-  border: 1px solid black;
   margin-top: 2%;
   padding: 1%;
+  box-shadow: 1px 1px 2px 1px #C0C0C0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+}
+
+.personal-data-section div{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-right: 10%;
 }
 
+
 .personal-detail{
-  margin: 1% 0%
+  margin: 1% 0%;
 }
 
 .login-detail{
-  margin: 1% 0%
-
+  margin: 1% 0%;  
 }
 
+
 .login-data-section{
-  width: 100%;
-  height: 120px;
+  width: 60%;
+  height: 90px;
   border-radius: 15px;
-  border: 1px solid black;
-  margin-top: 2%;
+  margin: 2% auto 0%;
   padding: 1%;
+  display: flex;
+  justify-content: center;
+  box-shadow: 1px 1px 2px 1px #C0C0C0;
+  background-color: #ffffff;
+}
+
+.login-data-section div{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-right: 10%;
 }
 
 .short-hr {
