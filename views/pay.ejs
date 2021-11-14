@@ -23,7 +23,7 @@
       <div class="sidebar-bottom">
         <ul class="list-unstyled CTAs">
           <li>
-            <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Logout</a>
+            <a href="../" class="download">Logout</a>
           </li>
         </ul>
       </div>
@@ -46,30 +46,32 @@
       <hr>
 
       <section class="main">
-        <div class="pay-section">
-          <div class="pay-detail">
-            <label for="from-account">From Account</label>
-            <select name="from-account" id="from-account" form="from-account-form">
-              <option value="" disabled selected>Select Account</option>
-              <option value="hkd-current">HKD Current</option> <!-- ejs -->
-              <option value="hkd-savings">HKD Savings</option><!-- ejs -->
-              <option value="usd-current">USD Current</option><!-- ejs -->
-              <option value="usd-savings">USD Savings</option><!-- ejs -->
-            </select>
-          </div>
-          <div class="pay-detail">
-            <label for="to-account">To Account</label>
-            <input type="number" name="to-account" id="to-account" form="to-account-form"
-              placeholder="Enter Account Number">
-          </div>
-          <div class="pay-detail">
-            <label for="to-account">Amount</label>
-            <input type="number" name="amount" id="amount" form="amount-form" placeholder="Enter Amount">
-          </div>
-          <button type="button" class="btn btn-secondary btn-md btn-pay download-button"> <i
-              class="transfer-icon fas fa-exchange-alt"></i>
-            Pay</button>
-        </div>
+        <form action="/pay/<%=username%>" method="POST">
+            <div class="pay-detail">
+              <label for="fromAccount">From Account</label>
+              <select name="fromAccount" id="fromAccount">
+                <option value="" disabled selected>Select Account</option>
+                <% for (var account of accounts){ %>
+                  <div class="account-card">
+                      <option value="<%=account.account_num%>"><%=account.currency%> <%=account.account_type%></option> <!-- ejs -->
+                  </div>
+                <%}%>
+              </select>
+            </div>
+            <div class="pay-detail">
+              <label for="toAccount">To Account</label>
+              <input type="number" name="toAccount" id="toAccount" class="form-control"
+                placeholder="Enter Account Number">
+            </div>
+            <div class="pay-detail">
+              <label for="amount">Amount</label>
+              <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter Amount">
+            </div>
+            <!-- <button type="button" class="btn btn-secondary btn-md btn-pay download-button"> <i
+                class="transfer-icon fas fa-exchange-alt"></i>
+              Pay</button> -->
+              <input type="submit" value="Pay" id="payButton" class="btn btn-secondary btn-md btn-pay download-button"> 
+        </form>
 
       </section>
     </div>
@@ -89,5 +91,9 @@
         console.log("test")
       });
     });
+    // document.getElementById("payButton").addEventListener("click", function (){
+    //   alert("Transaction completed");
+    // })
   </script>
+
 <% include("footer") %> 

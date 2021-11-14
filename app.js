@@ -1,5 +1,4 @@
 //jshint esversion:6
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
@@ -78,7 +77,7 @@ mysqlConnection.connect((err) => {
     console.log('Connection Established Successfully');
     mysqlConnection.query(createdb,function(err,result){
       if (!err)
-      console.log("Successfully created table");
+      console.log("Using project database...");
       else
       console.log(err);
     })
@@ -87,19 +86,13 @@ mysqlConnection.connect((err) => {
     console.log('Connection Failed!' + JSON.stringify(err, undefined, 2));
 });
 
-
 app.get("/", function (req, res) {
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
 });
 
 
 app.post('/login', (req, res) => {
-  // const username="RR";
-  // const password="BBB";
   const {username, password} = req.body;
-  // console.log(req.body);
-  // console.log(req);
-  // if (false)
 
   var verifyUser = `SELECT customer_id FROM Customer WHERE username="${username}" AND password="${password}";`;
   mysqlConnection.query(verifyUser,function(err,result){
@@ -109,7 +102,6 @@ app.post('/login', (req, res) => {
         var addToLoginHistory = `
         INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now());
         UPDATE Customer SET last_login = now() WHERE customer_id =`+customer_id+`;`
-        // console.log(addToLoginHistory);
         mysqlConnection.query(addToLoginHistory,function(err,result){});
         res.redirect(301, `/dashboard/${username}`);
       }
@@ -166,16 +158,11 @@ app.post("/registration", function(req, res) {
       res.render("registration");
       console.log(err);
     }
-
   });
-  // console.log(req.body);
 });
 
 app.get("/dashboard/:username", (req,res) => {
-  // console.log(req.params);
   const{username} = req.params;
-  // console.log(req.body);
-  // console.log("username", username);
 
   var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
@@ -209,7 +196,6 @@ app.get("/dashboard/:username", (req,res) => {
 
 app.get("/transactions/:username", (req,res) => {
   const {username} = req.params;
-  console.log(username);
   var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
@@ -232,7 +218,6 @@ app.get("/transactions/:username", (req,res) => {
 
 app.get("/profile/:username", (req,res) => {
   const {username} = req.params;
-  console.log(username);
   var getUsername = `SELECT customer_id,name,last_login,birthdate,email FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
@@ -249,59 +234,122 @@ app.get("/profile/:username", (req,res) => {
         console.log(result);
         res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, numPhone: result});
       })
-      // res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email});
     }
     else
     console.log(err);
   })
 })
 
-// app.get("/:customListName", function (req, res) {
-//   const customListName = _.capitalize(req.params.customListName);
+app.get("/pay/:username", (req,res) =>{
+  const {username} = req.params;
+  mysqlConnection.query(`SELECT customer_id from Customer WHERE username="${username}";`,function(err,result){
+    if (!err){
+      var customer_id = result[0].customer_id;
+      mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
+        var accounts = result;
+        res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+      })
+    }
+  })
+})
 
-//   List.findOne({ name: customListName }, function (err, foundList) {
-//     if (!err) {
-//       if (!foundList) {
-//         //Create a new list
-//         const list = new List({
-//           name: customListName,
-//           items: defaultItems
-//         });
-//         list.save();
-//         res.redirect("/" + customListName);
-//       } else {
-//         //Show an existing list
+app.post("/pay/:username", function(req,res){
+  const {username} = req.params;
+  const {fromAccount,toAccount,amount} = req.body;
+  // var customer_id ="";
+  // var accounts;
 
-//         res.render("contoh", { listTitle: foundList.name, newListItems: foundList.items });
-//       }
-//     }
-//   });
-// });
+  mysqlConnection.query(`SELECT customer_id from Customer WHERE username="${username}";`,function(err,result){
+    if (!err){
+      var customer_id = result[0].customer_id;
+      mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
+        var accounts = result;
 
-// app.post("/", function (req, res) {
+        var checkBalance = `
+        SELECT balance from Account WHERE account_num=${fromAccount};
+        `
+        mysqlConnection.query(checkBalance, function(err,result){
+          if (!err)
+          {
+            var balance = result[0].balance;
+            if (balance < amount)
+            {
+              console.log("Balance insufficient");
+              res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+            }
+            else
+            {
+              var checkCurrency= `
+              SELECT currency from Account WHERE account_num=${fromAccount} or account_num=${toAccount};
+              `
+              mysqlConnection.query(checkCurrency,function(err,result){
+                if (!err)
+                {
+                  if (result[0].currency == result[1].currency){
+                    var updateBalances = `
+                    UPDATE Account SET balance=balance-${amount} WHERE account_num=${fromAccount};
+                    UPDATE Account SET balance=balance+${amount} WHERE account_num=${toAccount};
+                    `
+                    mysqlConnection.query(updateBalances,function(err,result){
+                      if (err)
+                      console.log(err);
+                      else
+                      res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+                    });
+                  }
+                  else
+                  {
+                    console.log("Different currencies");
+                    res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+                  }
+                }
+              });
+            }
+          }
+        })
+        // res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+      })
+    }
+  })
+  console.log(customer_id);
 
-//   const itemName = req.body.newItem;
-//   const listName = req.body.list;
-
-//   const item = new Item({
-//     name: itemName
-//   });
-
-//   if (listName === "Today") {
-//     item.save();
-//     res.redirect("/");
-//   } else {
-//     List.findOne({ name: listName }, function (err, foundList) {
-//       foundList.items.push(item);
-//       foundList.save();
-//       res.redirect("/" + listName);
-//     });
-//   }
-// });
-
-// app.get("/about", function (req, res) {
-//   res.render("about");
-// });
+  // var checkBalance = `
+  // SELECT balance from Account WHERE account_num=${fromAccount};
+  // `
+  // mysqlConnection.query(checkBalance, function(err,result){
+  //   if (!err)
+  //   {
+  //     var balance = result[0].balance;
+  //     if (balance < amount)
+  //     {
+  //       console.log("Balance insufficient");
+  //     }
+  //     else
+  //     {
+  //       var checkCurrency= `
+  //       SELECT currency from Account WHERE account_num=${fromAccount} or account_num=${toAccount};
+  //       `
+  //       mysqlConnection.query(checkCurrency,function(err,result){
+  //         if (!err)
+  //         {
+  //           if (result[0].currency == result[1].currency){
+  //             var updateBalances = `
+  //             UPDATE Account SET balance=balance-${amount} WHERE account_num=${fromAccount};
+  //             UPDATE Account SET balance=balance+${amount} WHERE account_num=${toAccount};
+  //             `
+  //             mysqlConnection.query(updateBalances,function(err,result){
+  //               if (err)
+  //               console.log(err);
+  //             });
+  //           }
+  //           else
+  //           console.log("Different currencies");
+  //         }
+  //       });
+  //     }
+  //   }
+  // })
+})
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
