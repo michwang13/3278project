@@ -348,12 +348,6 @@ app.post("/pay/:username", function(req,res){
   });
 });
 
-<<<<<<< Updated upstream
-  app.get("/password/:username",function(req,res){
-    console.log(req.params);
-    res.render(path.join(__dirname, "views/password.ejs"));
-  });
-=======
 app.get("/password/:username",function(req,res){
   console.log(req.params);
   console.log(req.body);
@@ -371,7 +365,6 @@ app.get("/password/:username",function(req,res){
 //     var currentPassword = result[0].password;
 //   })
 // })
->>>>>>> Stashed changes
 
   // var checkBalance = `
   // SELECT balance from Account WHERE account_num=${fromAccount};
