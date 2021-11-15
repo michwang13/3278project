@@ -100,9 +100,15 @@ app.post('/login', (req, res) => {
       if (result.length>0){
         var customer_id = result[0].customer_id;
         var addToLoginHistory = `
-        INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now());
-        UPDATE Customer SET last_login = now() WHERE customer_id =`+customer_id+`;`
-        mysqlConnection.query(addToLoginHistory,function(err,result){});
+        INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now()+INTERVAL 8 HOUR);
+        UPDATE Customer SET last_login = now()+ INTERVAL 8 HOUR WHERE customer_id =`+customer_id+`;`
+        mysqlConnection.query(addToLoginHistory,function(err,result){
+          if (!err) {
+            console.log("success");
+          }
+          else
+          console.log(err);
+        });
         res.redirect(301, `/dashboard/${username}`);
       }
       else{
@@ -218,7 +224,7 @@ app.get("/transactions/:username", (req,res) => {
 
 app.get("/profile/:username", (req,res) => {
   const {username} = req.params;
-  var getUsername = `SELECT customer_id,name,last_login,birthdate,email FROM Customer WHERE username="`+username+`";`;
+  var getUsername = `SELECT customer_id,name,last_login,birthdate,email,password FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
   mysqlConnection.query(getUsername,function(err,result){
@@ -229,10 +235,11 @@ app.get("/profile/:username", (req,res) => {
       birthdate = result[0].birthdate;
       email = result[0].email;
       lastLogin = result[0].last_login;
+      password = "*".repeat(result[0].password.length);
       mysqlConnection.query(`SELECT phone_number from CustomerPhoneNumber WHERE customer_id="${customer_id}";`,function(err,result){
         if (!err)
-        console.log(result);
-        res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, numPhone: result});
+        // console.log(result);
+        res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, password:password, numPhone: result});
       })
     }
     else
@@ -242,15 +249,26 @@ app.get("/profile/:username", (req,res) => {
 
 app.get("/pay/:username", (req,res) =>{
   const {username} = req.params;
-  mysqlConnection.query(`SELECT customer_id from Customer WHERE username="${username}";`,function(err,result){
-    if (!err){
-      var customer_id = result[0].customer_id;
-      mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
-        var accounts = result;
-        res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
+  var getUsername = `SELECT customer_id,name,last_login,birthdate,email,password FROM Customer WHERE username="`+username+`";`;
+  var name ="";
+  var lastLogin="";
+  mysqlConnection.query(getUsername,function(err,result){
+    if (!err)
+    {
+      lastLogin =result[0].last_login;
+      mysqlConnection.query(`SELECT customer_id from Customer WHERE username="${username}";`,function(err,result){
+        if (!err){
+          var customer_id = result[0].customer_id;
+          mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
+            var accounts = result;
+            res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin});
+          })
+        }
       })
     }
   })
+  
+
 })
 
 app.post("/pay/:username", function(req,res){
@@ -275,7 +293,6 @@ app.post("/pay/:username", function(req,res){
             if (balance < amount)
             {
               console.log("Balance insufficient");
-              res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
             }
             else
             {
@@ -289,18 +306,17 @@ app.post("/pay/:username", function(req,res){
                     var updateBalances = `
                     UPDATE Account SET balance=balance-${amount} WHERE account_num=${fromAccount};
                     UPDATE Account SET balance=balance+${amount} WHERE account_num=${toAccount};
+                    INSERT INTO Transaction (amount,time,from_account,to_account) VALUES
+                    (${amount}, now() + INTERVAL 8 HOUR,${fromAccount},${toAccount});
                     `
                     mysqlConnection.query(updateBalances,function(err,result){
                       if (err)
                       console.log(err);
-                      else
-                      res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
                     });
                   }
                   else
                   {
                     console.log("Different currencies");
-                    res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
                   }
                 }
               });
@@ -311,7 +327,6 @@ app.post("/pay/:username", function(req,res){
       })
     }
   })
-  console.log(customer_id);
 
   // var checkBalance = `
   // SELECT balance from Account WHERE account_num=${fromAccount};

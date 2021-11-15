@@ -141,3 +141,36 @@
 </body>
 
 </html>
+
+
+
+
+          
+<!--profile ejs sebelomnysa incase masi butuh-->
+
+<div class="personal-data-section">
+  <p class="personal-detail">Name: <%= name %>
+  </p> 
+  <p class="personal-detail">Birth date: <%= birthdate %>
+  </p>
+  <p class="personal-detail">Email: <%= email %>
+  </p>
+  <p class="personal-detail">Phone Numbers:</p>
+  <% for (var phone of numPhone){ %>
+    <p>
+      <%=phone.phone_number%>
+    </p>
+    <%}%>
+</div>
+
+<hr class="short-hr">
+
+<div class="login-data-section">
+  <p class="login-detail">Username: <%= username %>
+  </p> 
+</div>
+
+<button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i
+    class="fas fa-key"></i>
+  Change Password
+</button>

@@ -14,7 +14,7 @@
         <div class="sidebar-top">
           <ul class="list-unstyled components">
             <li>
-              <a href="#">Dashboard</a> <!-- ejs, js -->
+              <a href="../dashboard/<%=username%>">Dashboard</a> <!-- ejs, js -->
             </li>
             <li>
               <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
@@ -54,31 +54,52 @@
       <section class="main">
 
         <div class="personal-data-section">
-          <p class="personal-detail">Name: <%= name %>
-          </p> <!-- ejs -->
-          <p class="personal-detail">Birth date: <%= birthdate %>
-          </p> <!-- ejs -->
-          <p class="personal-detail">Email: <%= email %>
-          </p> <!-- ejs -->
-          <p class="personal-detail">Phone Numbers:</p> <!-- ejs -->
-          <% for (var phone of numPhone){ %>
-            <p>
-              <%=phone.phone_number%>
-            </p>
-            <%}%>
+          <div>
+            <p class="personal-detail">Name</p>
+            <p class="personal-detail">Birth date</p>
+            <p class="personal-detail">Email Address</p>
+            <!-- <p class="personal-detail">Phone</p> -->
+            <% for (var phone of numPhone){ %>
+              <p class="personal-detail">Phone</p>
+              <%}%>
+            
+            <!-- <p class="personal-detail">Email Address</p> -->
+          </div>
+          <div>
+            <p class="personal-detail">: <%=name%></p> <!-- ini yang dikasih ejs -->
+            <p class="personal-detail">: <%=birthdate%></p> <!-- ini yang dikasih ejs -->
+            <p class="personal-detail">: <%=email%></p> <!-- ini yang dikasih ejs -->
+            <% for (var phone of numPhone){ %>
+              <p class="personal-detail">: <%=phone.phone_number%></p>
+              <%}%>
+            <!-- <p class="personal-detail">:</p> -->
+            <!-- <p class="personal-detail">:</p> -->
+          </div>
         </div>
 
         <hr class="short-hr">
 
         <div class="login-data-section">
-          <p class="login-detail">Username: <%= username %>
-          </p> <!-- ejs -->
+          <div>
+            <p class="login-detail">Username</p>
+            <p class="login-detail">Password</p>
+          </div>
+          <div>
+            <p class="login-detail">: <%= username %></p> <!-- ini yang dikasih ejs -->
+            <p class="login-detail">: <%= password%></p> <!-- ini yang dikasih ejs -->
+          </div>
         </div>
 
         <button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i
             class="fas fa-key"></i>
-          Change Password
-        </button>
+          Change Password</button>
+
+
+
+
+
+
+
 
 
       </section>
