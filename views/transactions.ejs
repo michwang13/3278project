@@ -49,7 +49,7 @@
         </button>
         <h2>Transactions</h2>
         <button type="button" class="btn btn-secondary btn-md download-button"> <i
-            class="transfer-icon fas fa-exchange-alt"></i><a href="../pay/<%=username%>">Pay</a></button></button>
+            class="transfer-icon fas fa-exchange-alt"></i><a href="../pay/<%=username%>">Pay</a></button>
       </section>
       <hr>
       <section class="main">
@@ -57,23 +57,31 @@
         <section class="filter-section">
           <div class="filter-date">
             <p>Date</p>
-            <input type="date" id="filter-date" name="filter-date" min="2018-01-01" max="2021-12-31">
+            <p>From:</p>
+            <input type="date" id="min-date" name="filter-date" min=<%=minTime%>  max=<%= maxTime %> value=<%=minTime%> >
+            <p>To:</p>
+            <input type="date" id="max-date" name="filter-date" min=<%=minTime%>  max=<%= maxTime %> value=<%=maxTime%>>
           </div>
           <div class="filter-time">
             <p>Time</p>
             <div class="input-time-container">
               <input type="radio" id="filter-am" name="am-pm" value="am">
-              <label for="am">AM</label>
+              <label for="filter-am">AM</label>
               <input type="radio" id="filter-pm" name="am-pm" value="pm">
-              <label for="pm">PM</label>
+              <label for="filter-pm">PM</label>
+              <input type="radio" id="filter-none" name="am-pm" value="none" checked>
+              <label for="filter-none">NA</label>
             </div>
           </div>
           <div class="filter-amount">
             <p>Amount</p>
             <div class="input-amount-container">
-              <input type="range" min="1" max="100" value="50" class="slider" id="filter-amount">
               <div class="filter-amount-display-container">
-                <p class="filter-amount-display">10,000</p> <!-- pake javascript + ejs -->
+                <p class="filter-amount-display"><%=minTransaction %> </p> <!-- pake javascript + ejs -->
+              </div>
+              <input type="range" min=<%=minTransaction%> max=<%=maxTransaction %>  value=<%=Math.round((maxTransaction+minTransaction)/2) %> class="slider" id="filter-amount">
+              <div class="filter-amount-display-container">
+                <p class="filter-amount-display"><%=maxTransaction %> </p> <!-- pake javascript + ejs -->
               </div>
             </div>
           </div>
@@ -145,8 +153,110 @@
         $('#sidebar, #content').toggleClass('active');
         $('.collapse.in').toggleClass('in');
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        console.log("test")
       });
+
+      const renderElements = (transSection, filterTime, minDate, maxDate, filterAmount) => {
+        transSection.innerHTML = "<h6><u>All Transactions</u></h6>";
+        let render = "";
+        "<% for (var transaction of transactions){ %>"
+          if (new Date("<%= transaction.time %>") >= new Date(new Date(minDate.value).setHours(0,0,0,0)) && new Date("<%= transaction.time %>") <= new Date(new Date(maxDate.value).setHours(23,59,59,99)) &&
+          parseFloat("<%= transaction.amount %>")<=filterAmount.value) {
+            if (filterTime=="am") {
+              if (new Date("<%= transaction.time %>").getHours()<12) {
+                render+=`<div class="transactions-container">
+                  <div class="transaction">
+                    <div class="transaction-name-date-container">
+                      <p class="transaction-name">
+                        <%=transaction.transaction_id%>
+                      </p>
+                      <p class="transaction-date">
+                        <%=transaction.time%>
+                      </p>
+                    </div>
+                    <div class="transaction-amount-container">
+                      <p class="transaction-amount">
+                      <%=transaction.amount%>
+                      </p>
+                    </div>
+                  </div>
+                </div>`
+              }
+            } else if (filterTime=="pm") {
+              if (new Date("<%= transaction.time %>").getHours()>=12) {
+                render+=`<div class="transactions-container">
+                  <div class="transaction">
+                    <div class="transaction-name-date-container">
+                      <p class="transaction-name">
+                        <%=transaction.transaction_id%>
+                      </p>
+                      <p class="transaction-date">
+                        <%=transaction.time%>
+                      </p>
+                    </div>
+                    <div class="transaction-amount-container">
+                      <p class="transaction-amount">
+                      <%=transaction.amount%>
+                      </p>
+                    </div>
+                  </div>
+                </div>`
+              }
+            } else {
+              render+=`<div class="transactions-container">
+                <div class="transaction">
+                  <div class="transaction-name-date-container">
+                    <p class="transaction-name">
+                      <%=transaction.transaction_id%>
+                    </p>
+                    <p class="transaction-date">
+                      <%=transaction.time%>
+                    </p>
+                  </div>
+                  <div class="transaction-amount-container">
+                    <p class="transaction-amount">
+                    <%=transaction.amount%>
+                    </p>
+                  </div>
+                </div>
+              </div>`
+            }
+            
+            
+          }
+        "<%}%>"
+        transSection.innerHTML+=render;
+      }
+
+      let minDate = document.querySelector("#min-date");
+      let maxDate = document.querySelector("#max-date");
+      let timeFilters = Array.from(document.getElementsByName("am-pm"));
+      let filterTime = "NA";
+      let filterAmount = document.querySelector("#filter-amount");
+      let transSection = document.querySelector(".transactions-section");
+
+      for (let timeFilter of timeFilters) {
+        timeFilter.addEventListener("change", ()=>{
+          filterTime = timeFilter.value;
+          renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
+        })
+      }
+      minDate.addEventListener("change", ()=>{
+        maxDate.min = minDate.value;
+        renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
+      });
+      maxDate.addEventListener("change", ()=>{
+        minDate.max = maxDate.value;
+        renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
+      });
+      filterAmount.addEventListener("change", ()=>{
+        renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
+      })
+
+      renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
+
+      // let filters = 
     });
+
+
   </script>
   <% include("footer") %>

@@ -144,14 +144,27 @@ input[type="text"] {
 
 .login-button-container{
   height: 50px; 
-  width: 100%;
+  width: 80%;
+  /* margin: 0%; */
+}
+
+.login-button-faceid-container{
+  height: 50px; 
+  width: 250px;
+  /* margin: 10% 0%; */
+  display: flex;
+  justify-content: center;
   margin: 10% auto 0%;
 }
 
 .login-button-container input{
   display: block;
-  width: 60%;
-  margin: 0% auto 0%;
+  width: 90%;
+  margin: 0% auto;
+}
+
+.login-faceid-container{
+  margin: 0% 10px;
 }
 
 .create-a-new-account-container{
@@ -621,7 +634,7 @@ input{
   padding: 10px 10px 10px 0px;
   background: #36CF9A;
   display: flex;
-  width: 100%;
+  width: 80%;
   height: 80px;
   justify-content: center;
 }
