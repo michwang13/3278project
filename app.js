@@ -128,6 +128,10 @@ app.get("/registration", function(req, res) {
 
 app.post("/registration", function(req, res) {
   const {username, password, fullName, birthDate, email, phone} = req.body;
+  console.log(req.body);
+  console.log(phone);
+  var phoneList = phone.split(",");
+  console.log(phoneList);
   var registerCustomer = `
   INSERT INTO Customer (name,birthdate,email,last_login,username,password)VALUES ("${fullName}","${birthDate}","${email}","","${username}","${password}");
   `
@@ -138,22 +142,12 @@ app.post("/registration", function(req, res) {
         if (!err)
         {
           var customer_id = result[0].customer_id;
-          if (typeof phone === 'string')
-          {
-            mysqlConnection.query(`INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phone}");`,function(err,result){
+          for (var i=0;i<phoneList.length;i++){
+            var addPhoneNumber = `INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phoneList[i]}");`
+            mysqlConnection.query(addPhoneNumber,function(err,result){
               if (err)
               console.log(err);
-            })
-          }
-          else
-          {
-            for (var i=0;i<phone.length;i++){
-              var addPhoneNumber = `INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phone[i]}");`
-              mysqlConnection.query(addPhoneNumber,function(err,result){
-                if (err)
-                console.log(err);
-              });
-            }
+            });
           }
           res.redirect(301, "/");
         }
@@ -214,7 +208,7 @@ app.get("/transactions/:username", (req,res) => {
       var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`
       mysqlConnection.query(getTransactions, function(err, result) {
         var transactions = result;
-        res.render(path.join(__dirname, "views/transactions.ejs"), {username:name, lastLogin: lastLogin, transactions:transactions});
+        res.render(path.join(__dirname, "views/transactions.ejs"), {username, lastLogin, transactions});
       })
     }
     else
@@ -230,6 +224,7 @@ app.get("/profile/:username", (req,res) => {
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
+      console.log(result);
       customer_id = result[0].customer_id;
       name = result[0].name;
       birthdate = result[0].birthdate;

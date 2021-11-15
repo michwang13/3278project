@@ -85,7 +85,7 @@
           <div class="login-button-container">
             <input type="submit" class="btn btn-secondary btn-md download-button" value="Sign up">
             <div class="already-have-an-account-container">
-              <a href="">I already have an account</a> <!-- redirect ke log in -->
+              <a href="/login">I already have an account</a> <!-- redirect ke log in -->
             </div>
           </div>
         </div>
@@ -95,3 +95,71 @@
 </body>
 
 </html>
+
+
+
+
+<style>
+  .btn-circle.btn-sm {
+          width: 30px;
+          height: 30px;
+          padding: 6px 0px;
+          border-radius: 15px;
+          font-size: 8px;
+          text-align: center;
+      }
+      .btn-circle.btn-md {
+          width: 50px;
+          height: 50px;
+          padding: 7px 10px;
+          border-radius: 25px;
+          font-size: 20px;
+          text-align: center;
+      }
+  .hide {
+    display: none;
+  }
+</style>
+
+
+<!-- old registration.ejs kalo msh butuh-->
+<div id="login-box">
+  <h2>Registration</h2>
+  <form action="/registration" method="POST">
+      <label for="username">Type in your username here:</label>
+      <input type="text" class="form-control" name="username" placeholder="username">
+      <label for="password">Type in your password here:</label>
+      <input type="password" class="form-control" name="password" placeholder="password">
+      <label for="fullName">Full Name:</label>
+      <input type="text" class="form-control" name="fullName" placeholder="first name (e.g. John)">
+      <label for="birthDate">Birth Date:</label>
+      <input type="date" class="form-control" name="birthDate" value="2000-01-01" min="1900-01-01" max="2003-01-01">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" name="email" placeholder="Email Address">
+      <label for="phone">Phone Number:</label>
+      <div id="phoneInputs">
+        <input type="text" class="form-control" name="phone" placeholder="phone number">
+      </div>
+      
+      <div id="addButton" class="btn btn-primary btn-circle btn-md">+</div>
+      <div id="hideButton" class="btn btn-primary btn-circle btn-md hide">-</div>
+      
+      <!-- <button onClick="login(event)" class="btn btn-primary mb-3">Login</button> -->
+      <p id="usernameTaken" style="display:hidden">Username is taken!</p>
+      <input type="submit" value="Register" class="btn btn-primary">
+  </form>
+</div>
+
+<script>
+  // const check=(evt)=> {
+  //   if (document.getElementById("phoneInputs").children().length>1) {
+  //     document.querySelector("#hideButton").classList.toggle("hide");
+  //   }
+  // }
+  document.querySelector("#addButton").addEventListener("click", ()=> {
+    document.querySelector("#phoneInputs").innerHTML+=`<input type="text" class="form-control" name="phone" placeholder="phone number">`;
+  })
+  document.querySelector("#phoneInputs").addEventListener("change", ()=> {
+    document.getElementById("phoneInputs").children().length>1?document.querySelector("#hideButton").classList.toggle("hide"):None;
+  })
+</script>

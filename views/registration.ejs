@@ -1,66 +1,56 @@
 <%- include("header") -%>
+<div class="registration-message-container">
+  <img src="/images/azbank_logo.png" alt="">
+  <h3>Sign up to AZ Bank!</h3>
+</div>
 
-  <style>
-    .btn-circle.btn-sm {
-            width: 30px;
-            height: 30px;
-            padding: 6px 0px;
-            border-radius: 15px;
-            font-size: 8px;
-            text-align: center;
-        }
-        .btn-circle.btn-md {
-            width: 50px;
-            height: 50px;
-            padding: 7px 10px;
-            border-radius: 25px;
-            font-size: 20px;
-            text-align: center;
-        }
-    .hide {
-      display: none;
-    }
-  </style>
-
-  <div id="login-box">
-    <h2>Registration</h2>
-    <form action="/registration" method="POST">
-        <label for="username">Type in your username here:</label>
-        <input type="text" class="form-control" name="username" placeholder="username">
-        <label for="password">Type in your password here:</label>
-        <input type="password" class="form-control" name="password" placeholder="password">
-        <label for="fullName">Full Name:</label>
-        <input type="text" class="form-control" name="fullName" placeholder="first name (e.g. John)">
-        <label for="birthDate">Birth Date:</label>
-        <input type="date" class="form-control" name="birthDate" value="2000-01-01" min="1900-01-01" max="2003-01-01">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" name="email" placeholder="Email Address">
-        <label for="phone">Phone Number:</label>
-        <div id="phoneInputs">
-          <input type="text" class="form-control" name="phone" placeholder="phone number">
+<div class="registration-container">
+  <form action="/registration" method="POST">
+    <div class="registration-details-container">
+      <div class="registration-details-bio-container">
+        <div>
+          <p>Full Name</p>
+          <input type="text" class="form-control registration-input" name="fullName" id="fullName">
         </div>
-        
-        <div id="addButton" class="btn btn-primary btn-circle btn-md">+</div>
-        <div id="hideButton" class="btn btn-primary btn-circle btn-md hide">-</div>
-        
-        <!-- <button onClick="login(event)" class="btn btn-primary mb-3">Login</button> -->
-        <p id="usernameTaken" style="display:hidden">Username is taken!</p>
-        <input type="submit" value="Register" class="btn btn-primary">
-    </form>
-  </div>
+        <div>
+          <p>Birth Date</p>
+          <input type="date" class="form-control registration-input" name="birthDate" id="birthDate" min="1980-01-01"
+            max="2021-12-31" style="width:300px">
+        </div>
+        <div>
+          <p>Email</p>
+          <input type="text" class="form-control registration-input" name="email" id="email">
+        </div>
+        <div>
+          <p>Phone Numbers</p>
+          <input type="text" class="form-control registration-input" name="phone" id="phone"
+            placeholder="12345678, 87654321, ...">
+          <!-- 52741755, 58212342, 51239567 terus diformat pake js buat dipisahin-->
+        </div>
+      </div>
+      <div class="vertical-line-parent">
+        <div class="vertical-line"></div>
+      </div>
+      <div class="registration-details-username-password-button-container">
+        <div class="registration-details-username-password-container">
+          <div>
+            <p>Choose a Username</p>
+            <input type="text" class="form-control registration-input" name="username" id="username">
+          </div>
+          <div>
+            <p>Choose a Password</p>
+            <input type="password" class="form-control registration-input" name="password" id="password">
+          </div>
+        </div>
+        <div class="login-button-container">
+          <input type="submit" class="btn btn-secondary btn-md download-button" value="Sign up">
+          <div class="already-have-an-account-container">
+            <a href="/">I already have an account</a> <!-- redirect ke log in -->
+          </div>
+        </div>
+      </div>
+  </form>
+</div>
 
-  <script>
-    // const check=(evt)=> {
-    //   if (document.getElementById("phoneInputs").children().length>1) {
-    //     document.querySelector("#hideButton").classList.toggle("hide");
-    //   }
-    // }
-    document.querySelector("#addButton").addEventListener("click", ()=> {
-      document.querySelector("#phoneInputs").innerHTML+=`<input type="text" class="form-control" name="phone" placeholder="phone number">`;
-    })
-    document.querySelector("#phoneInputs").addEventListener("change", ()=> {
-      document.getElementById("phoneInputs").children().length>1?document.querySelector("#hideButton").classList.toggle("hide"):None;
-    })
-  </script>
 
 <%- include("footer") -%>
