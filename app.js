@@ -176,10 +176,12 @@ app.get("/dashboard/:username", (req,res) => {
         if (!err)
         {
           var accounts = result;
-          var getTransaction = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc LIMIT 4;`;
+          var getTransaction = `SELECT T1.from_account, T1.to_account, T1.amount, T1.time, C1.name AS nameFrom, C2.name as nameTo FROM (SELECT *FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc LIMIT 4)T1, Account A1, Account A2, Customer C1, Customer C2
+          WHERE T1.from_account=A1.account_num AND T1.to_account=A2.account_num AND A1.customer_id=C1.customer_id AND A2.customer_id=C2.customer_id;`;
           mysqlConnection.query(getTransaction,function(err,result){
             if (!err) {
               var transactions = result;
+              console.log(transactions);
               res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, accounts: accounts, transactions: transactions,dir: __dirname});
 
             }
@@ -203,13 +205,15 @@ app.get("/transactions/:username", (req,res) => {
       name = result[0].name;
       lastLogin = result[0].last_login;
       customer_id = result[0].customer_id;
-      var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      var getTransactions = `SELECT T1.from_account, T1.to_account, T1.amount, T1.time, C1.name AS nameFrom, C2.name as nameTo FROM (SELECT *FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc)T1, Account A1, Account A2, Customer C1, Customer C2
+          WHERE T1.from_account=A1.account_num AND T1.to_account=A2.account_num AND A1.customer_id=C1.customer_id AND A2.customer_id=C2.customer_id ORDER BY T1.time desc;`;
       var maxTransactionSQL = `SELECT MAX(amount) AS max_amount FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       var minTransactionSQL = `SELECT MIN(amount) AS min_amount FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       var maxDateSQL = `SELECT MAX(time) AS max_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       var minDateSQL = `SELECT MIN(time) AS min_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       mysqlConnection.query(getTransactions+maxTransactionSQL+minTransactionSQL+maxDateSQL+minDateSQL, function(err, result) {
         var transactions = result[0];
+        console.log(transactions);
         var maxTransaction = result[1][0].max_amount;
         var minTransaction = result[2][0].min_amount;
         var maxTime = result[3][0].max_time.toString();
