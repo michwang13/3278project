@@ -128,10 +128,8 @@ app.get("/registration", function(req, res) {
 
 app.post("/registration", function(req, res) {
   const {username, password, fullName, birthDate, email, phone} = req.body;
-  console.log(req.body);
-  console.log(phone);
+
   var phoneList = phone.split(",");
-  console.log(phoneList);
   var registerCustomer = `
   INSERT INTO Customer (name,birthdate,email,last_login,username,password)VALUES ("${fullName}","${birthDate}","${email}","","${username}","${password}");
   `
@@ -167,7 +165,7 @@ app.get("/dashboard/:username", (req,res) => {
   var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="`+username+`";`;
   var name ="";
   var lastLogin="";
-  console.log(__dirname);
+  // console.log(__dirname);
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
@@ -207,7 +205,7 @@ app.get("/transactions/:username", (req,res) => {
       customer_id = result[0].customer_id;
       var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`
       mysqlConnection.query(getTransactions, function(err, result) {
-        console.log(result[0].time.length);
+        // console.log(result[0].time.length);
         var transactions = result;
         res.render(path.join(__dirname, "views/transactions.ejs"), {username, lastLogin, transactions});
       })
@@ -225,7 +223,7 @@ app.get("/profile/:username", (req,res) => {
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
-      console.log(result);
+      // console.log(result);
       customer_id = result[0].customer_id;
       name = result[0].name;
       birthdate = result[0].birthdate;
@@ -330,6 +328,11 @@ app.post("/pay/:username", function(req,res){
         // res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
       })
     }
+  })
+
+  app.get("/password/:username",function(req,res){
+    console.log(req.params);
+    res.render(path.join(__dirname, "views/password.ejs"))
   })
 
   // var checkBalance = `
