@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const app = express();
 const path = require("path");
+const {spawn} = require('child_process');
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,6 +88,13 @@ mysqlConnection.connect((err) => {
 });
 
 app.get("/", function (req, res) {
+  // const python = spawn('python', ['face_capture.py', 'buntoro', 2]);
+
+  // python.on('exit', function() {
+  //   spawn('python', ['train.py'])
+  // })
+  spawn('python', ['train.py']);
+  console.log('register');
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login',alert:"False"});
 });
 
@@ -147,6 +155,13 @@ app.post("/registration", function(req, res) {
               console.log(err);
             });
           }
+          // const python = spawn('python', ['face_capture.py', username, 2]);
+          // python.on('exit', function() {
+          //   spawn('python', ['train.py'])
+          // })
+          // console.log('register');
+          const python = spawn('python', ['face_capture.py', username, 2]);
+          console.log('register');
           res.redirect(301, "/");
         }
       });
