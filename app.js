@@ -343,10 +343,10 @@ app.post("/pay/:username", function(req,res){
             }
           }
         })
-        // res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts});
       })
     }
   })
+})
 
   app.get("/password/:username",function(req,res){
     console.log(req.params);
@@ -389,7 +389,6 @@ app.post("/pay/:username", function(req,res){
   //     }
   //   }
   // })
-})
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
