@@ -131,16 +131,40 @@ input[type="text"] {
   margin: 0%; 
 }
 
+.wrong-password-container p{
+  /* color: #0B0E26; */
+  color: #DCDCDC;
+  font-size: 60%;
+}
+
+.wrong-password-container{
+  text-align: center;
+}
+
+
 .login-button-container{
   height: 50px; 
-  width: 100%;
+  width: 80%;
+  /* margin: 0%; */
+}
+
+.login-button-faceid-container{
+  height: 50px; 
+  width: 250px;
+  /* margin: 10% 0%; */
+  display: flex;
+  justify-content: center;
   margin: 10% auto 0%;
 }
 
 .login-button-container input{
   display: block;
-  width: 60%;
-  margin: 0% auto 0%;
+  width: 90%;
+  margin: 0% auto;
+}
+
+.login-faceid-container{
+  margin: 0% 10px;
 }
 
 .create-a-new-account-container{

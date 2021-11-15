@@ -52,5 +52,18 @@
   </form>
 </div>
 
+<script>
+  var sendAlert = "<%=alert%>";
+  window.onload = () => {
+      function checkAlert(){
+          if (sendAlert=="True")
+          {
+              alert("Username is taken!");
+          }
+      }
+      checkAlert();
+  }
+</script>
+
 
 <%- include("footer") -%>

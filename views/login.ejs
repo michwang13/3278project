@@ -3,59 +3,78 @@
         <img src="/images/azbank_logo.png" alt="">
         <h3>Welcome to AZ Bank!</h3>
     </div>
-    
+
     <div class="login-container">
-    <form id="login-form" action="/login" method="POST">
-        <div class="login-username-password-container">
-        <div>
-            <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username">
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password">
-        </div>
-        </div>
-        <div class="login-button-container">
-        <input type="submit" class="btn btn-secondary btn-md download-button" value="Log in">
-        <div class="create-a-new-account-container">
-            <a href="/registration">Create a new account</a> <!-- redirect ke register -->
-        </div>
-        </div>
-    </form>
+        <form id="login-form" action="/login" method="POST">
+            <div class="login-username-password-container">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" id="username">
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+            </div>
+            <div class="login-button-faceid-container">
+                <div class="login-button-container">
+                    <input type="submit" class="btn btn-secondary btn-md download-button" value="Log in">
+                    <div class="create-a-new-account-container">
+                        <a href="/registration">Create a new account</a> <!-- redirect ke register -->
+                    </div>
+                </div>
+                <div class="login-faceid-container">
+                    <button type="button" class="btn btn-secondary btn-md download-button">
+                        <a href="">
+                            <i class="far fa-laugh"></i>
+                        </a>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
     <%- include("footer") -%>
 
-    <script>
-        const login = async e => {
-            e.preventDefault();
-            console.log("___________________ \n\n");
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        <script>
+            const login = async e => {
+                e.preventDefault();
+                console.log("___________________ \n\n");
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
 
-            console.log(username, password)
+                console.log(username, password)
 
-            const option = {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                method: "POST",
-                mode: 'cors',
-                body: JSON.stringify({
-                    username: "username",
-                    password: "password"
-                }),
-                redirect: "follow"
+                const option = {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    mode: 'cors',
+                    body: JSON.stringify({
+                        username: "username",
+                        password: "password"
+                    }),
+                    redirect: "follow"
+                }
+                // fetching data
+                await fetch(`<%= url %>`, option)
+                    .then(res => {
+                        console.log("res.url");
+                        return res.redirected && (location.href = res.url)
+                    })
+                    .catch(err => alert('Something happen wrong!'));
+                // return res.json();
             }
 
-            // fetching data
-            await fetch(`<%= url %>`, option)
-                .then(res => {
-                    console.log("res.url");
-                    return res.redirected && (location.href = res.url)
-                })
-                .catch(err => alert('Something happen wrong!'));
-            // return res.json();
-        }
-    </script>
+            var sendAlert = "<%=alert%>";
+            window.onload = () => {
+                function checkAlert() {
+                    if (sendAlert == "True") {
+                        alert("Username and/or password is incorrect");
+                    }
+                }
+                checkAlert();
+            }
 
+
+        </script>

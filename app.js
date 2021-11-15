@@ -87,7 +87,7 @@ mysqlConnection.connect((err) => {
 });
 
 app.get("/", function (req, res) {
-  res.render(path.join(__dirname, "views/login.ejs") , {url: '/login'});
+  res.render(path.join(__dirname, "views/login.ejs") , {url: '/login',alert:"False"});
 });
 
 
@@ -113,7 +113,7 @@ app.post('/login', (req, res) => {
       }
       else{
         console.log("Wrong username and/or password");
-        res.render(path.join(__dirname, "views/login.ejs") , {url: '/login', username: req.body.username});
+        res.render(path.join(__dirname, "views/login.ejs") , {url: '/login', username: req.body.username,alert:"True"});
       }
     }
     else{
@@ -123,7 +123,7 @@ app.post('/login', (req, res) => {
 });
 
 app.get("/registration", function(req, res) {
-  res.render("registration");
+  res.render("registration",{alert:"False"});
 });
 
 app.post("/registration", function(req, res) {
@@ -155,7 +155,7 @@ app.post("/registration", function(req, res) {
     }
     else
     {
-      res.render("registration");
+      res.render("registration",{alert:"True"});
       console.log(err);
     }
   });
@@ -274,7 +274,7 @@ app.get("/pay/:username", (req,res) =>{
           var customer_id = result[0].customer_id;
           mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
             var accounts = result;
-            res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin});
+            res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin,alert:"False"});
           })
         }
       })
@@ -290,9 +290,10 @@ app.post("/pay/:username", function(req,res){
   // var customer_id ="";
   // var accounts;
 
-  mysqlConnection.query(`SELECT customer_id from Customer WHERE username="${username}";`,function(err,result){
+  mysqlConnection.query(`SELECT customer_id,last_login from Customer WHERE username="${username}";`,function(err,result){
     if (!err){
       var customer_id = result[0].customer_id;
+      var lastLogin = result[0].last_login;
       mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
         var accounts = result;
 
@@ -306,6 +307,8 @@ app.post("/pay/:username", function(req,res){
             if (balance < amount)
             {
               console.log("Balance insufficient");
+              res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin,alert:"Insufficient balance to complete transaction..."});
+
             }
             else
             {
@@ -323,14 +326,19 @@ app.post("/pay/:username", function(req,res){
                     (${amount}, now() + INTERVAL 8 HOUR,${fromAccount},${toAccount});
                     `
                     mysqlConnection.query(updateBalances,function(err,result){
-                      if (err)
-                      console.log(err);
+                      if (!err)
+                      {
+                        console.log("Transaction success");
+                        res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin,alert:"Transaction completed!"});
+                      }
                     });
                   }
                   else
                   {
                     alert("Transaction Failed");
                     console.log("Different currencies");
+                    res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin,alert:"Currency incompatible to complete transaction..."});
+
                   }
                 }
               });
