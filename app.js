@@ -94,7 +94,7 @@ app.get("/", function (req, res) {
 app.post('/login', (req, res) => {
   const {username, password} = req.body;
 
-  var verifyUser = `SELECT customer_id FROM Customer WHERE username="${username}" AND password="${password}";`;
+  var verifyUser = `SELECT customer_id FROM Customer WHERE username="${username}" AND BINARY password="${password}";`;
   mysqlConnection.query(verifyUser,function(err,result){
     if (!err) {
       if (result.length>0){
@@ -104,7 +104,7 @@ app.post('/login', (req, res) => {
         UPDATE Customer SET last_login = now()+ INTERVAL 8 HOUR WHERE customer_id =`+customer_id+`;`;
         mysqlConnection.query(addToLoginHistory,function(err,result){
           if (!err) {
-            console.log("success");
+            console.log("Succesfully added to login history");
           }
           else
           console.log(err);
@@ -181,7 +181,7 @@ app.get("/dashboard/:username", (req,res) => {
           mysqlConnection.query(getTransaction,function(err,result){
             if (!err) {
               var transactions = result;
-              console.log(transactions);
+              // console.log(transactions);
               res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, accounts: accounts, transactions: transactions,dir: __dirname});
 
             }
@@ -213,7 +213,7 @@ app.get("/transactions/:username", (req,res) => {
       var minDateSQL = `SELECT MIN(time) AS min_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       mysqlConnection.query(getTransactions+maxTransactionSQL+minTransactionSQL+maxDateSQL+minDateSQL, function(err, result) {
         var transactions = result[0];
-        console.log(transactions);
+        // console.log(transactions);
         var maxTransaction = result[1][0].max_amount;
         var minTransaction = result[2][0].min_amount;
         var maxTime = result[3][0].max_time.toString();
@@ -244,7 +244,6 @@ app.get("/profile/:username", (req,res) => {
   mysqlConnection.query(getUsername,function(err,result){
     if (!err)
     {
-      // console.log(result);
       customer_id = result[0].customer_id;
       name = result[0].name;
       birthdate = result[0].birthdate;
@@ -253,7 +252,6 @@ app.get("/profile/:username", (req,res) => {
       password = "*".repeat(result[0].password.length);
       mysqlConnection.query(`SELECT phone_number from CustomerPhoneNumber WHERE customer_id="${customer_id}";`,function(err,result){
         if (!err)
-        // console.log(result);
         res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, password:password, numPhone: result});
       });
     }
@@ -353,59 +351,46 @@ app.post("/pay/:username", function(req,res){
 });
 
 app.get("/password/:username",function(req,res){
-  console.log(req.params);
-  console.log(req.body);
-  res.render(path.join(__dirname, "views/password.ejs"))
+  const {username} = req.params;
+  // console.log(req.body);
+  mysqlConnection.query(`SELECT last_login FROM Customer WHERE username="${username}";`,function(err,result){
+    if (!err)
+    {
+      var lastLogin = result[0].last_login;
+      res.render(path.join(__dirname, "views/password.ejs"),{username,lastLogin,alert:""});
+    }
+  })
+});
+
+app.post("/password/:username",function(req,res){
+  const {username} = req.params;
+  const {currentPassword,newPassword} = req.body;
+
+  mysqlConnection.query(`SELECT last_login,password from Customer where username = "${username}";`,function(err,result){
+    if (!err) {
+      var lastLogin = result[0].last_login;
+      var validPassword = result[0].password;
+      if (currentPassword === validPassword)
+      {
+        mysqlConnection.query(`UPDATE Customer SET password="${newPassword}" WHERE username="${username}";`,function(err,result){
+          if (!err){
+            console.log("Password updated");
+            res.render(path.join(__dirname, "views/password.ejs"),{username,lastLogin,alert:"updated"});
+          }
+        })
+      }
+      else
+      {
+        console.log("The current password you entered is incorrect");
+        res.render(path.join(__dirname, "views/password.ejs"),{username,lastLogin,alert:"not updated"});
+      }
+    }
+  })
+
 })
 
-// app.post("/password/:username",function(req,res){
-//   const {username} = req.params;
-//   var getCurrentPassword = `
-//   SELECT customer_id,last_login,password from Customer WHERE username="${username}";
-//   `
-//   mysqlConnection.query(getCurrentPassword, function(err,result){
-//     var customer_id = result[0].customer_id;
-//     var lastLogin = result[0].last_login;
-//     var currentPassword = result[0].password;
-//   })
-// })
 
-  // var checkBalance = `
-  // SELECT balance from Account WHERE account_num=${fromAccount};
-  // `
-  // mysqlConnection.query(checkBalance, function(err,result){
-  //   if (!err)
-  //   {
-  //     var balance = result[0].balance;
-  //     if (balance < amount)
-  //     {
-  //       console.log("Balance insufficient");
-  //     }
-  //     else
-  //     {
-  //       var checkCurrency= `
-  //       SELECT currency from Account WHERE account_num=${fromAccount} or account_num=${toAccount};
-  //       `
-  //       mysqlConnection.query(checkCurrency,function(err,result){
-  //         if (!err)
-  //         {
-  //           if (result[0].currency == result[1].currency){
-  //             var updateBalances = `
-  //             UPDATE Account SET balance=balance-${amount} WHERE account_num=${fromAccount};
-  //             UPDATE Account SET balance=balance+${amount} WHERE account_num=${toAccount};
-  //             `
-  //             mysqlConnection.query(updateBalances,function(err,result){
-  //               if (err)
-  //               console.log(err);
-  //             });
-  //           }
-  //           else
-  //           console.log("Different currencies");
-  //         }
-  //       });
-  //     }
-  //   }
-  // })
+
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");

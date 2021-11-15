@@ -96,11 +96,14 @@
             <div class="transactions-container">
               <div class="transaction">
                 <div class="transaction-name-date-container">
-                  <p class="transaction-name">
+                  <!-- <p class="transaction-name">
                     From Account: <%=transaction.from_account%>
                   </p>
                   <p class="transaction-name">
                     To Account: <%=transaction.to_account%>
+                  </p> -->
+                  <p class="transaction-name">
+                    <%=transaction.from_account%> <i class='fas fa-angle-double-right'></i> <%=transaction.to_account%>
                   </p>
                   <p class="transaction-date">
                     <%=transaction.time%>
@@ -108,7 +111,7 @@
                 </div>
                 <div class="transaction-amount-container">
                   <p class="transaction-amount">
-                    $<%=transaction.amount%>
+                    $ <%=transaction.amount%>
                   </p>
                 </div>
               </div>
@@ -167,19 +170,14 @@
                   <div class="transaction">
                     <div class="transaction-name-date-container">
                       <p class="transaction-name">
-                        From: <%=transaction.nameFrom%>
-                      </p>
-                      <p class="transaction-name">
-                        To: <%=transaction.nameTo%>
+                        <%=transaction.nameFrom%> <i class='fas fa-angle-double-right'></i> <%=transaction.nameTo%>
                       </p>
                       <p class="transaction-date">
                         <%=transaction.time%>
                       </p>
                     </div>
                     <div class="transaction-amount-container">
-                      <p class="transaction-amount">
-                      <%=transaction.amount%>
-                      </p>
+                      <p class="transaction-amount">$ <%=transaction.amount%></p>
                     </div>
                   </div>
                 </div>`
@@ -190,10 +188,7 @@
                   <div class="transaction">
                     <div class="transaction-name-date-container">
                       <p class="transaction-name">
-                        From: <%=transaction.nameFrom%>
-                      </p>
-                      <p class="transaction-name">
-                        To: <%=transaction.nameTo%>
+                        <%=transaction.nameFrom%> <i class='fas fa-angle-double-right'></i> <%=transaction.nameTo%>
                       </p>
                       <p class="transaction-date">
                         <%=transaction.time%>
@@ -201,7 +196,7 @@
                     </div>
                     <div class="transaction-amount-container">
                       <p class="transaction-amount">
-                      <%=transaction.amount%>
+                      $ <%=transaction.amount%>
                       </p>
                     </div>
                   </div>
@@ -212,10 +207,7 @@
                 <div class="transaction">
                   <div class="transaction-name-date-container">
                     <p class="transaction-name">
-                      From: <%=transaction.nameFrom%>
-                    </p>
-                    <p class="transaction-name">
-                      To: <%=transaction.nameTo%>
+                        <%=transaction.nameFrom%> <i class='fas fa-angle-double-right'></i> <%=transaction.nameTo%>
                     </p>
                     <p class="transaction-date">
                       <%=transaction.time%>
@@ -223,7 +215,7 @@
                   </div>
                   <div class="transaction-amount-container">
                     <p class="transaction-amount">
-                    <%=transaction.amount%>
+                    $ <%=transaction.amount%>
                     </p>
                   </div>
                 </div>
