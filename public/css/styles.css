@@ -131,6 +131,17 @@ input[type="text"] {
   margin: 0%; 
 }
 
+.wrong-password-container p{
+  /* color: #0B0E26; */
+  color: #DCDCDC;
+  font-size: 60%;
+}
+
+.wrong-password-container{
+  text-align: center;
+}
+
+
 .login-button-container{
   height: 50px; 
   width: 100%;
