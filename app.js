@@ -60,7 +60,7 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(from_account) REFERENCES Account(account_num),
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
-`
+`;
 
 // INSERT INTO Transaction (amount,time,from_account,to_account) VALUES 
 // (500,"2021-11-14 00:00:00",0,619),
@@ -80,7 +80,7 @@ mysqlConnection.connect((err) => {
       console.log("Using project database...");
       else
       console.log(err);
-    })
+    });
   }
   else
     console.log('Connection Failed!' + JSON.stringify(err, undefined, 2));
@@ -101,7 +101,7 @@ app.post('/login', (req, res) => {
         var customer_id = result[0].customer_id;
         var addToLoginHistory = `
         INSERT INTO CustomerLoginHistory VALUES (`+customer_id+`,now()+INTERVAL 8 HOUR);
-        UPDATE Customer SET last_login = now()+ INTERVAL 8 HOUR WHERE customer_id =`+customer_id+`;`
+        UPDATE Customer SET last_login = now()+ INTERVAL 8 HOUR WHERE customer_id =`+customer_id+`;`;
         mysqlConnection.query(addToLoginHistory,function(err,result){
           if (!err) {
             console.log("success");
@@ -119,7 +119,7 @@ app.post('/login', (req, res) => {
     else{
       console.log(err);
     }
-  })
+  });
 });
 
 app.get("/registration", function(req, res) {
@@ -132,7 +132,7 @@ app.post("/registration", function(req, res) {
   var phoneList = phone.split(",");
   var registerCustomer = `
   INSERT INTO Customer (name,birthdate,email,last_login,username,password)VALUES ("${fullName}","${birthDate}","${email}","","${username}","${password}");
-  `
+  `;
   mysqlConnection.query(registerCustomer,function(err,result){
     if (!err)
     {
@@ -141,7 +141,7 @@ app.post("/registration", function(req, res) {
         {
           var customer_id = result[0].customer_id;
           for (var i=0;i<phoneList.length;i++){
-            var addPhoneNumber = `INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phoneList[i]}");`
+            var addPhoneNumber = `INSERT INTO CustomerPhoneNumber VALUES("${customer_id}","${phoneList[i]}");`;
             mysqlConnection.query(addPhoneNumber,function(err,result){
               if (err)
               console.log(err);
@@ -149,7 +149,7 @@ app.post("/registration", function(req, res) {
           }
           res.redirect(301, "/");
         }
-      })
+      });
     }
     else
     {
@@ -176,20 +176,20 @@ app.get("/dashboard/:username", (req,res) => {
         if (!err)
         {
           var accounts = result;
-          var getTransaction = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc LIMIT 4;`
+          var getTransaction = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc LIMIT 4;`;
           mysqlConnection.query(getTransaction,function(err,result){
             if (!err) {
               var transactions = result;
               res.render(path.join(__dirname, "views/dashboard.ejs"), {username, name, lastLogin: lastLogin, accounts: accounts, transactions: transactions,dir: __dirname});
 
             }
-          })
+          });
         }
-      })
+      });
     }
     else
     console.log(err);
-  })
+  });
 });
 
 app.get("/transactions/:username", (req,res) => {
@@ -229,8 +229,8 @@ app.get("/transactions/:username", (req,res) => {
     }
     else
     console.log(err);
-  })
-})
+  });
+});
 
 app.get("/profile/:username", (req,res) => {
   const {username} = req.params;
@@ -251,12 +251,12 @@ app.get("/profile/:username", (req,res) => {
         if (!err)
         // console.log(result);
         res.render(path.join(__dirname, "views/profile.ejs"), {username, name, lastLogin, birthdate, email: email, password:password, numPhone: result});
-      })
+      });
     }
     else
     console.log(err);
-  })
-})
+  });
+});
 
 app.get("/pay/:username", (req,res) =>{
   const {username} = req.params;
@@ -273,14 +273,14 @@ app.get("/pay/:username", (req,res) =>{
           mysqlConnection.query(`SELECT account_num,account_type,currency,balance FROM Account WHERE customer_id="${customer_id}";`,function(err,result){
             var accounts = result;
             res.render(path.join(__dirname, "views/pay.ejs"),{username:username,accounts: accounts, lastLogin:lastLogin,alert:"False"});
-          })
+          });
         }
-      })
+      });
     }
-  })
+  });
   
 
-})
+});
 
 app.post("/pay/:username", function(req,res){
   const {username} = req.params;
@@ -297,7 +297,7 @@ app.post("/pay/:username", function(req,res){
 
         var checkBalance = `
         SELECT balance from Account WHERE account_num=${fromAccount};
-        `
+        `;
         mysqlConnection.query(checkBalance, function(err,result){
           if (!err)
           {
@@ -312,7 +312,7 @@ app.post("/pay/:username", function(req,res){
             {
               var checkCurrency= `
               SELECT currency from Account WHERE account_num=${fromAccount} or account_num=${toAccount};
-              `
+              `;
               mysqlConnection.query(checkCurrency,function(err,result){
                 if (!err)
                 {
@@ -322,7 +322,7 @@ app.post("/pay/:username", function(req,res){
                     UPDATE Account SET balance=balance+${amount} WHERE account_num=${toAccount};
                     INSERT INTO Transaction (amount,time,from_account,to_account) VALUES
                     (${amount}, now() + INTERVAL 8 HOUR,${fromAccount},${toAccount});
-                    `
+                    `;
                     mysqlConnection.query(updateBalances,function(err,result){
                       if (!err)
                       {
@@ -342,16 +342,16 @@ app.post("/pay/:username", function(req,res){
               });
             }
           }
-        })
-      })
+        });
+      });
     }
-  })
-})
+  });
+});
 
   app.get("/password/:username",function(req,res){
     console.log(req.params);
-    res.render(path.join(__dirname, "views/password.ejs"))
-  })
+    res.render(path.join(__dirname, "views/password.ejs"));
+  });
 
   // var checkBalance = `
   // SELECT balance from Account WHERE account_num=${fromAccount};
