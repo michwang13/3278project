@@ -109,6 +109,17 @@
     // document.getElementById("payButton").addEventListener("click", function (){
     //   alert("Transaction completed");
     // })
+
+    var sendAlert = "<%=alert%>";
+        window.onload = () => {
+            function checkAlert(){
+                if (sendAlert!="False")
+                {
+                    alert(sendAlert);
+                }
+            }
+            checkAlert();
+        }
   </script>
 
   <% include("footer") %>
