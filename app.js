@@ -205,11 +205,29 @@ app.get("/transactions/:username", (req,res) => {
       name = result[0].name;
       lastLogin = result[0].last_login;
       customer_id = result[0].customer_id;
-      var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`
-      mysqlConnection.query(getTransactions, function(err, result) {
-        var transactions = result;
-        res.render(path.join(__dirname, "views/transactions.ejs"), {username, lastLogin, transactions});
-      })
+      var getTransactions = `SELECT * FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      var maxTransactionSQL = `SELECT MAX(amount) AS max_amount FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      var minTransactionSQL = `SELECT MIN(amount) AS min_amount FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      var maxDateSQL = `SELECT MAX(time) AS max_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      var minDateSQL = `SELECT MIN(time) AS min_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
+      mysqlConnection.query(getTransactions+maxTransactionSQL+minTransactionSQL+maxDateSQL+minDateSQL, function(err, result) {
+        var transactions = result[0];
+        var maxTransaction = result[1][0].max_amount;
+        var minTransaction = result[2][0].min_amount;
+        var maxTime = result[3][0].max_time.toString();
+        maxTime = new Date(maxTime);
+        maxTime = `${maxTime.getFullYear()}-${maxTime.getMonth()+1}-${maxTime.getDate()}`;
+        var minTime = result[4][0].min_time.toString();
+        minTime = new Date(minTime);
+        minTime = `${minTime.getFullYear()}-${minTime.getMonth()+1}-${minTime.getDate()}`;
+        res.render(path.join(__dirname, "views/transactions.ejs"), {username, lastLogin, transactions, maxTransaction, minTransaction, maxTime, minTime});
+        
+      });
+      // mysqlConnection.query(maxTransactionSQL, function(err, result) {
+      //   var maxTransaction = result;
+        
+      // })
+      
     }
     else
     console.log(err);
@@ -311,6 +329,7 @@ app.post("/pay/:username", function(req,res){
                   }
                   else
                   {
+                    alert("Transaction Failed");
                     console.log("Different currencies");
                   }
                 }
