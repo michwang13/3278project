@@ -348,10 +348,30 @@ app.post("/pay/:username", function(req,res){
   });
 });
 
+<<<<<<< Updated upstream
   app.get("/password/:username",function(req,res){
     console.log(req.params);
     res.render(path.join(__dirname, "views/password.ejs"));
   });
+=======
+app.get("/password/:username",function(req,res){
+  console.log(req.params);
+  console.log(req.body);
+  res.render(path.join(__dirname, "views/password.ejs"))
+})
+
+// app.post("/password/:username",function(req,res){
+//   const {username} = req.params;
+//   var getCurrentPassword = `
+//   SELECT customer_id,last_login,password from Customer WHERE username="${username}";
+//   `
+//   mysqlConnection.query(getCurrentPassword, function(err,result){
+//     var customer_id = result[0].customer_id;
+//     var lastLogin = result[0].last_login;
+//     var currentPassword = result[0].password;
+//   })
+// })
+>>>>>>> Stashed changes
 
   // var checkBalance = `
   // SELECT balance from Account WHERE account_num=${fromAccount};
