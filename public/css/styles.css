@@ -616,6 +616,9 @@ input {
 	height: 100vh;
 	z-index: 999;
 	background: #36cf9a;
+	border-radius: 0px 20px 20px 0px;
+	box-shadow: 1px 1px 3px 3px #c0c0c0;
+
 	color: #fff;
 	transition: all 0.3s;
 }
