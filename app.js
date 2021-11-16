@@ -107,11 +107,6 @@ mysqlConnection.connect((err) => {
 });
 
 app.get("/", function (req, res) {
-  // const python = spawn('python', ['face_capture.py', 'buntoro', 2]);
-
-  // python.on('exit', function() {
-  //   spawn('python', ['train.py'])
-  // })
   console.log('register');
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login',alert:"False"});
 });
@@ -119,13 +114,8 @@ app.get("/", function (req, res) {
 app.get('/face', (req, res) => {
   const { spawn } = require('child_process');
   const python = spawn('python', ['faces.py', 'buntoro', 2]);
-
-  // python.on('exit', function() {
-  //     spawn('python', ['train.py', 'buntoro', 2])
-  // })
   let result;
   python.stdout.on('data', (data) => {
-      // console.log('pattern: ', data.toString());
       result = data.toString();
       });
   python.stderr.on('data', (data) => {
@@ -168,7 +158,6 @@ app.get('/faceregister', (req, res) => {
     const python = spawn('python', ['train.py']);
 
     python.stdout.on('data', (data) => {
-        // console.log('pattern: ', data.toString());
         result = data.toString();
         });
     python.stderr.on('data', (data) => {
@@ -249,11 +238,7 @@ app.post("/registration", function(req, res) {
               console.log(err);
             });
           }
-          // const python = spawn('python', ['face_capture.py', username, 2]);
-          // python.on('exit', function() {
-          //   spawn('python', ['train.py'])
-          // })
-          // console.log('register');
+          res.redirect(301, `/`);
         }
       });
     }
