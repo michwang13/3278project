@@ -622,7 +622,8 @@ input {
 }
 
 #sidebar .sidebar-header {
-	padding: 10px 10px 10px 0px;
+	padding: 10px 20px 10px 0px;
+	margin: 0px auto;
 	background: #36cf9a;
 	display: flex;
 	width: 80%;
