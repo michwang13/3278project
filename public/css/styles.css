@@ -143,11 +143,24 @@ input[type="text"] {
 .login-button-container {
 	height: 50px;
 	width: 80%;
-	margin: 10% auto;
+	/* margin: 10% auto; */
 	text-align: center;
 }
 
 .login-button-container a{
+	margin: 0 auto;
+	font-size: 75%;
+	color: #fed752;
+}
+
+.registration-button-container {
+	height: 50px;
+	width: 80%;
+	margin: 10% auto;
+	text-align: center;
+}
+
+.registration-button-container a{
 	margin: 0 auto;
 	font-size: 75%;
 	color: #fed752;
