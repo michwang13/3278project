@@ -9,11 +9,11 @@
             <div class="login-username-password-container">
                 <div>
                     <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" id="username">
+                    <input type="text" class="form-control" name="username" id="username" value="<%= locals.username %>">
                 </div>
                 <div>
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password">
+                    <input type="password" class="form-control" name="password" id="password" value="<%= locals.password %>">
                 </div>
             </div>
             <div class="login-button-faceid-container">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="login-faceid-container">
                     <button type="button" class="btn btn-secondary btn-md download-button">
-                        <a href="">
+                        <a href="/face">
                             <i class="far fa-laugh"></i>
                         </a>
                     </button>
@@ -41,9 +41,7 @@
                 console.log("___________________ \n\n");
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-
                 console.log(username, password)
-
                 const option = {
                     headers: {
                         "Content-Type": "application/json"
@@ -65,7 +63,6 @@
                     .catch(err => alert('Something happen wrong!'));
                 // return res.json();
             }
-
             var sendAlert = "<%=alert%>";
             window.onload = () => {
                 function checkAlert() {
@@ -75,6 +72,4 @@
                 }
                 checkAlert();
             }
-
-
         </script>

@@ -98,6 +98,50 @@ app.get("/", function (req, res) {
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login',alert:"False"});
 });
 
+app.get('/face', (req, res) => {
+  const { spawn } = require('child_process');
+  const python = spawn('python', ['faces.py', 'buntoro', 2]);
+
+  // python.on('exit', function() {
+  //     spawn('python', ['train.py', 'buntoro', 2])
+  // })
+  let result;
+  python.stdout.on('data', (data) => {
+      // console.log('pattern: ', data.toString());
+      result = data.toString();
+      });
+  python.stderr.on('data', (data) => {
+  console.error('err: ', data.toString());
+  });
+
+  python.on('error', (error) => {
+  console.error('error: ', error.message);
+  });
+
+  python.on('close', (code) => {
+  console.log('child process exited with code ', code);
+  });
+
+  python.on('exit', function() {
+    console.log("Result" + result);
+    username = result.toLowerCase();
+    // console.log("Manjuy " +username)
+    var getPass =  `SELECT username, password FROM Customer WHERE username="${username}";`;
+    console.log(getPass);
+    mysqlConnection.query(getPass, function(err, result) {
+      if(!err) {
+        let username = result[0].username;
+        let password = result[0].password;
+        console.log(username, password);
+        res.render(path.join(__dirname, "views/login.ejs"), {url: '/login', username, password, alert:"False"});
+      }
+      else {
+        console.log(err);
+      }
+    })
+  })
+})
+
 
 app.post('/login', (req, res) => {
   const {username, password} = req.body;
