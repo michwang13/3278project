@@ -54,3 +54,4 @@ with open("labels.pickle", "wb") as f:
 # Train the recognizer and save the trained model.
 recognizer.train(x_train, np.array(y_label))
 recognizer.save("train.yml")
+sys.stdout.write("Training done")

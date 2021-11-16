@@ -93,7 +93,6 @@ app.get("/", function (req, res) {
   // python.on('exit', function() {
   //   spawn('python', ['train.py'])
   // })
-  spawn('python', ['train.py']);
   console.log('register');
   res.render(path.join(__dirname, "views/login.ejs") , {url: '/login',alert:"False"});
 });
@@ -139,6 +138,38 @@ app.get('/face', (req, res) => {
         console.log(err);
       }
     })
+  })
+})
+
+app.get('/faceregister', (req, res) => {
+  const capture = spawn('python', ['face_capture.py', req.query.username, 2]);
+  console.log('faceregister');
+  capture.on('exit', function() {
+    console.log("Selesai foto");
+    const python = spawn('python', ['train.py']);
+
+    python.stdout.on('data', (data) => {
+        // console.log('pattern: ', data.toString());
+        result = data.toString();
+        });
+    python.stderr.on('data', (data) => {
+    console.error('err: ', data.toString());
+    });
+
+    python.on('error', (error) => {
+    console.error('error: ', error.message);
+    });
+
+    python.on('close', (code) => {
+    console.log('child process exited with code ', code);
+    });
+
+    python.on('exit', function() {
+    console.log("Result" + result);
+    });
+
+    python.on('exit', () => {res.send("Finished capturing")});
+    
   })
 })
 
@@ -204,9 +235,6 @@ app.post("/registration", function(req, res) {
           //   spawn('python', ['train.py'])
           // })
           // console.log('register');
-          const python = spawn('python', ['face_capture.py', username, 2]);
-          console.log('register');
-          res.redirect(301, "/");
         }
       });
     }
