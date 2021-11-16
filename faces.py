@@ -8,11 +8,9 @@ from datetime import datetime
 import sys
 
 # 1 Create database connection
-myconn = mysql.connector.connect(host="localhost", user="root", passwd="Sparko3010", database="facerecognition")
 date = datetime.utcnow()
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
-cursor = myconn.cursor()
 
 
 #2 Load recognize and read label from model
