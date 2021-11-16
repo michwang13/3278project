@@ -473,7 +473,7 @@ app.get("/loginhistory/:username",function(req,res){
     {
       var customer_id = result[0].customer_id;
       var lastLogin = result[0].last_login;
-      mysqlConnection.query(`SELECT login_history FROM CustomerLoginHistory WHERE customer_id = "${customer_id}";`,function(err,result){
+      mysqlConnection.query(`SELECT login_history FROM CustomerLoginHistory WHERE customer_id = "${customer_id}" ORDER BY login_history desc;`,function(err,result){
         if (!err)
         {
           var loginHistory = result;
