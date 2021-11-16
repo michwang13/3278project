@@ -2,3 +2,6 @@ node_modules/
 *.json
 mysql.js
 .gitignore
+data/
+train.yml
+labels.pickle
