@@ -669,7 +669,7 @@ input {
 }
 
 #sidebar .sidebar-header {
-	padding: 10px 10px 5px 0px;
+	padding: 0px 0px;
 	margin: 0px auto;
 	background: #36cf9a;
 	display: flex;
@@ -790,7 +790,7 @@ a.article:hover {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 670px;
+	height: 800px;
 }
 
 .sidebar-bottom p {
