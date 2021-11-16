@@ -61,7 +61,26 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(from_account) REFERENCES Account(account_num),
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
+
+
 `;
+
+// INSERT INTO Account (account_num,account_type,currency,balance,customer_id) VALUES 
+// (23146103,"Savings","HKD",22500,64),
+// (61478042,"Current","HKD",7000,64),
+// (77009156,"Savings","USD",1000,64),
+// (35473887,"Current","USD",650,64),
+// (67642595,"Savings","HKD",30000,65),
+// (17947353,"Current","HKD",6500,65),
+// (80740049,"Savings","USD",1300,65),
+// (59737524,"Current","USD",1000,65),
+
+// (82266537,"Savings","HKD",18000,66),
+// (84304448,"Current","HKD",10000,66),
+// (72860997,"Savings","USD",2100,66),
+// (91438029,"Current","USD",1500,66);
+
+
 
 // INSERT INTO Transaction (amount,time,from_account,to_account) VALUES 
 // (500,"2021-11-14 00:00:00",0,619),
@@ -445,9 +464,25 @@ app.post("/password/:username",function(req,res){
       }
     }
   })
+});
 
+app.get("/loginhistory/:username",function(req,res){
+  const {username} = req.params;
+  mysqlConnection.query(`SELECT customer_id, last_login FROM Customer WHERE username="${username}";`,function(err,result){
+    if (!err)
+    {
+      var customer_id = result[0].customer_id;
+      var lastLogin = result[0].last_login;
+      mysqlConnection.query(`SELECT login_history FROM CustomerLoginHistory WHERE customer_id = "${customer_id}";`,function(err,result){
+        if (!err)
+        {
+          var loginHistory = result;
+          res.render(path.join(__dirname, "views/loginhistory.ejs"),{username,lastLogin,loginHistory});
+        }
+      })
+    }
+  })
 })
-
 
 
 
