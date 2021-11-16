@@ -35,7 +35,8 @@
           <div class="registration-details-username-password-container">
             <div>
               <p>Choose a Username</p>
-              <input type="text" class="form-control registration-input" name="username" id="username" onkeyup="enableface(this)">
+              <input type="text" class="form-control registration-input" name="username" id="username"
+                onkeyup="enableface(this)">
             </div>
             <div>
               <p>Choose a Password</p>
@@ -44,8 +45,11 @@
           </div>
           <div class="registration-button-container">
 
-            <input type="submit" class="btn btn-secondary btn-md download-button registration-button" id="submitbtn" value="Sign up" disabled>
-            <button onclick="registerFace()" type="button" id="sidebarCollapse" class="btn btn-secondary" disabled>Set FaceID</button>
+            <input type="submit" class="btn btn-secondary btn-md download-button registration-button" id="submitbtn"
+              value="Sign up">
+            <button onclick="registerFace()" type="button" id="set-faceid-button"
+              class="btn btn-secondary set-faceid-button">Set
+              FaceID</button>
             <a href="/">I already have an account</a> <!-- redirect ke log in -->
             <!-- 
             <div class="already-have-an-account-container">
@@ -58,24 +62,25 @@
   <script>
     console.log("reee");
     function enableface(userfield) {
-      let facebutton = document.getElementById('sidebarCollapse');
+      let facebutton = document.getElementById('set-faceid-button');
       if (userfield.value != "") {
-            //Enable the TextBox when TextBox has value.
-            facebutton.disabled = false;
+        //Enable the TextBox when TextBox has value.
+        facebutton.disabled = false;
       } else {
-          //Disable the TextBox when TextBox is empty.
-          facebutton.disabled = true;
+        //Disable the TextBox when TextBox is empty.
+        facebutton.disabled = true;
       }
     }
-    
+
     const registerFace = e => {
       console.log("test");
       const username = document.getElementById('username').value;
       fetch(`/faceregister/?username=${username}`)
-      .then( response => {
-        console.log(response);
-        document.getElementById('submitbtn').disabled = false;
-      });
+        .then(response => {
+          console.log(response);
+          document.getElementById('submitbtn').style.display = "block";
+          document.getElementById('set-faceid-button').style.display = "none";
+        });
     }
 
     var sendAlert = "<%=alert%>";

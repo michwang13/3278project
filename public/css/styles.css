@@ -167,8 +167,10 @@ input[type="text"] {
 }
 
 .registration-button {
-	display: block;
+	/* display: block; */
+	width: 90%;
 	margin: 0 auto;
+	display: none;
 }
 
 .login-button-faceid-container {
@@ -821,4 +823,25 @@ a.article:hover {
 	width: 100%;
 	margin: 8% 0%;
 	text-align: center;
+}
+
+.set-faceid-button{
+	display: block;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.input-date{
+	width: 130px;
+}
+
+.input-date-container{
+	display: flex;
+	justify-content: space-between;
+}
+
+.input-date-container div{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }

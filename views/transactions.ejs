@@ -57,15 +57,25 @@
         <section class="filter-section">
           <div class="filter-date">
             <p>Date</p>
-            <p>From:</p>
-            <input type="date" id="min-date" name="filter-date" min=<%=minTime%>  max=<%= maxTime %> value=<%=minTime%> >
-            <p>To:</p>
-            <input type="date" id="max-date" name="filter-date" min=<%=minTime%>  max=<%= maxTime %> value=<%=maxTime%>>
+            <div class="input-date-container">
+              <input type="date" id="min-date" class="input-date" name="filter-date" min=<%=minTime%> max=<%= maxTime %>
+                value=<%=minTime%> >
+                  <div>
+                    <p>-</p>
+
+                  </div>
+                  <input type="date" id="max-date" class="input-date" name="filter-date" min=<%=minTime%> max=<%=
+                    maxTime %> value=
+                    <%=maxTime%>>
+            </div>
           </div>
           <div class="filter-time">
             <p>Time</p>
             <div class="input-time-container">
-              <input type="radio" id="filter-am" name="am-pm" value="am">
+              <div>
+                <input type="radio" id="filter-am" name="am-pm" value="am">
+                <p>A.M.</p>
+              </div>
               <label for="filter-am">AM</label>
               <input type="radio" id="filter-pm" name="am-pm" value="pm">
               <label for="filter-pm">PM</label>
@@ -77,12 +87,17 @@
             <p>Amount</p>
             <div class="input-amount-container">
               <div class="filter-amount-display-container">
-                <p class="filter-amount-display"><%=minTransaction %> </p> <!-- pake javascript + ejs -->
+                <p class="filter-amount-display">
+                  <%=minTransaction %>
+                </p> <!-- pake javascript + ejs -->
               </div>
-              <input type="range" min=<%=minTransaction%> max=<%=maxTransaction %>  value=<%=Math.round((maxTransaction+minTransaction)/2) %> class="slider" id="filter-amount">
-              <div class="filter-amount-display-container">
-                <p class="filter-amount-display"><%=maxTransaction %> </p> <!-- pake javascript + ejs -->
-              </div>
+              <input type="range" min=<%=minTransaction%> max=<%=maxTransaction %> value=
+                <%=Math.round((maxTransaction+minTransaction) /2) %> class="slider" id="filter-amount">
+                  <div class="filter-amount-display-container">
+                    <p class="filter-amount-display">
+                      <%=maxTransaction %>
+                    </p> <!-- pake javascript + ejs -->
+                  </div>
             </div>
           </div>
 
@@ -103,7 +118,8 @@
                     To Account: <%=transaction.to_account%>
                   </p> -->
                   <p class="transaction-name">
-                    <%=transaction.from_account%> <i class='fas fa-angle-double-right'></i> <%=transaction.to_account%>
+                    <%=transaction.from_account%> <i class='fas fa-angle-double-right'></i>
+                      <%=transaction.to_account%>
                   </p>
                   <p class="transaction-date">
                     <%=transaction.time%>
@@ -118,24 +134,7 @@
             </div>
             <%}%>
         </div>
-        <!-- 
-        <div class="transactions-section">
-          <h6><u>11/11/2011</u></h6>
-          <div class="transactions-container">
-            <div class="transaction">
-              <div class="transaction-name-date-container">
-                <p class="transaction-name">Schneiders</p>
-                <p class="transaction-date">27/10/2001</p>
-              </div>
-              <div class="transaction-amount-container">
-                <p class="transaction-amount">+$500</p>
-              </div>
-            </div>
-            <div class="transaction"></div>
-            <div class="transaction"></div>
-            <div class="transaction"></div>
-          </div>
-        </div> -->
+
 
 
 
@@ -162,11 +161,11 @@
         transSection.innerHTML = "<h6><u>All Transactions</u></h6>";
         let render = "";
         "<% for (var transaction of transactions){ %>"
-          if (new Date("<%= transaction.time %>") >= new Date(new Date(minDate.value).setHours(0,0,0,0)) && new Date("<%= transaction.time %>") <= new Date(new Date(maxDate.value).setHours(23,59,59,99)) &&
-          parseFloat("<%= transaction.amount %>")<=filterAmount.value) {
-            if (filterTime=="am") {
-              if (new Date("<%= transaction.time %>").getHours()<12) {
-                render+=`<div class="transactions-container">
+        if (new Date("<%= transaction.time %>") >= new Date(new Date(minDate.value).setHours(0, 0, 0, 0)) && new Date("<%= transaction.time %>") <= new Date(new Date(maxDate.value).setHours(23, 59, 59, 99)) &&
+          parseFloat("<%= transaction.amount %>") <= filterAmount.value) {
+          if (filterTime == "am") {
+            if (new Date("<%= transaction.time %>").getHours() < 12) {
+              render += `<div class="transactions-container">
                   <div class="transaction">
                     <div class="transaction-name-date-container">
                       <p class="transaction-name">
@@ -181,10 +180,10 @@
                     </div>
                   </div>
                 </div>`
-              }
-            } else if (filterTime=="pm") {
-              if (new Date("<%= transaction.time %>").getHours()>=12) {
-                render+=`<div class="transactions-container">
+            }
+          } else if (filterTime == "pm") {
+            if (new Date("<%= transaction.time %>").getHours() >= 12) {
+              render += `<div class="transactions-container">
                   <div class="transaction">
                     <div class="transaction-name-date-container">
                       <p class="transaction-name">
@@ -201,9 +200,9 @@
                     </div>
                   </div>
                 </div>`
-              }
-            } else {
-              render+=`<div class="transactions-container">
+            }
+          } else {
+            render += `<div class="transactions-container">
                 <div class="transaction">
                   <div class="transaction-name-date-container">
                     <p class="transaction-name">
@@ -220,12 +219,12 @@
                   </div>
                 </div>
               </div>`
-            }
-            
-            
           }
+
+
+        }
         "<%}%>"
-        transSection.innerHTML+=render;
+        transSection.innerHTML += render;
       }
 
       let minDate = document.querySelector("#min-date");
@@ -236,20 +235,20 @@
       let transSection = document.querySelector(".transactions-section");
 
       for (let timeFilter of timeFilters) {
-        timeFilter.addEventListener("change", ()=>{
+        timeFilter.addEventListener("change", () => {
           filterTime = timeFilter.value;
           renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
         })
       }
-      minDate.addEventListener("change", ()=>{
+      minDate.addEventListener("change", () => {
         maxDate.min = minDate.value;
         renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
       });
-      maxDate.addEventListener("change", ()=>{
+      maxDate.addEventListener("change", () => {
         minDate.max = maxDate.value;
         renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
       });
-      filterAmount.addEventListener("change", ()=>{
+      filterAmount.addEventListener("change", () => {
         renderElements(transSection, filterTime, minDate, maxDate, filterAmount);
       })
 
