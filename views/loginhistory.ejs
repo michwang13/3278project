@@ -17,7 +17,7 @@
             <li>
               <a href="../dashboard/<%=username%>">Dashboard</a> <!-- ejs, js -->
             </li>
-            <li class="active">
+            <li>
               <a href="../transactions/<%= username %>">Transactions</a> <!-- ejs, js -->
             </li>
             <li>
@@ -57,12 +57,13 @@
         <!-- ejs -->
         <div class="transactions-section">
           <% for (var login of loginHistory){ %>
-            <div class="transactions-container">
-              <div class="transaction">
+            <div class="history-container">
+              <div class="history">
                 <div class="transaction-name-date-container">
                   <p class="transaction-name">
                     <%= login.login_history%>
                   </p>
+
                 </div>
               </div>
             </div>

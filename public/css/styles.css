@@ -408,6 +408,24 @@ hr {
 	box-shadow: 1px 1px 2px 1px #c0c0c0;
 }
 
+.history-container{
+	display: flex;
+	justify-content: center;
+}
+
+.history {
+	width: 90%;
+	height: 50px;
+	border-radius: 15px;
+	background-color: #ffffff;
+	margin-top: 1%;
+	padding: 1%;
+	display: flex;
+	justify-content: center;
+	box-shadow: 1px 1px 2px 1px #c0c0c0;
+}
+
+
 .transaction p {
 	color: #0b0e26;
 }

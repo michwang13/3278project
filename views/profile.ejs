@@ -62,23 +62,31 @@
             <% for (var phone of numPhone){ %>
               <p class="personal-detail">Phone</p>
               <%}%>
-            
-            <!-- <p class="personal-detail">Email Address</p> -->
+
+                <!-- <p class="personal-detail">Email Address</p> -->
           </div>
           <div>
-            <p class="personal-detail">: <%=name%></p> <!-- ini yang dikasih ejs -->
-            <p class="personal-detail">: <%=birthdate%></p> <!-- ini yang dikasih ejs -->
-            <p class="personal-detail">: <%=email%></p> <!-- ini yang dikasih ejs -->
+            <p class="personal-detail">: <%=name%>
+            </p> <!-- ini yang dikasih ejs -->
+            <p class="personal-detail">: <%=birthdate%>
+            </p> <!-- ini yang dikasih ejs -->
+            <p class="personal-detail">: <%=email%>
+            </p> <!-- ini yang dikasih ejs -->
             <% for (var phone of numPhone){ %>
-              <p class="personal-detail">: <%=phone.phone_number%></p>
+              <p class="personal-detail">: <%=phone.phone_number%>
+              </p>
               <%}%>
-            <!-- <p class="personal-detail">:</p> -->
-            <!-- <p class="personal-detail">:</p> -->
+                <!-- <p class="personal-detail">:</p> -->
+                <!-- <p class="personal-detail">:</p> -->
           </div>
         </div>
 
+        <button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i
+            class="fa fa-sign-in" aria-hidden="true"></i><a href="../loginhistory/<%=username%>"> View Login
+            History</a></button>
+
+
         <hr class="short-hr">
-        <button type="button" class="btn btn-secondary btn-sm btn-change-password download-button"> <i class="fa fa-sign-in" aria-hidden="true"></i><a href="../loginhistory/<%=username%>">  View Login History</a></button>
 
         <div class="login-data-section">
           <div>
@@ -86,8 +94,10 @@
             <p class="login-detail">Password</p>
           </div>
           <div>
-            <p class="login-detail">: <%= username %></p> <!-- ini yang dikasih ejs -->
-            <p class="login-detail">: <%= password%></p> <!-- ini yang dikasih ejs -->
+            <p class="login-detail">: <%= username %>
+            </p> <!-- ini yang dikasih ejs -->
+            <p class="login-detail">: <%= password%>
+            </p> <!-- ini yang dikasih ejs -->
           </div>
         </div>
 
