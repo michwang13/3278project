@@ -173,7 +173,7 @@ app.get('/faceregister', (req, res) => {
     });
 
     python.on('exit', function() {
-    console.log("Result" + result);
+    // console.log("Result" + result);
     });
 
     python.on('exit', () => {res.send("Finished capturing")});
@@ -305,14 +305,23 @@ app.get("/transactions/:username", (req,res) => {
       mysqlConnection.query(getTransactions+maxTransactionSQL+minTransactionSQL+maxDateSQL+minDateSQL, function(err, result) {
         var transactions = result[0];
         // console.log(transactions);
-        var maxTransaction = result[1][0].max_amount;
-        var minTransaction = result[2][0].min_amount;
-        var maxTime = result[3][0].max_time.toString();
-        maxTime = new Date(maxTime);
-        maxTime = `${maxTime.getFullYear()}-${maxTime.getMonth()+1}-${maxTime.getDate()}`;
-        var minTime = result[4][0].min_time.toString();
-        minTime = new Date(minTime);
-        minTime = `${minTime.getFullYear()}-${minTime.getMonth()+1}-${minTime.getDate()}`;
+        try {
+          var maxTransaction = result[1][0].max_amount;
+          var minTransaction = result[2][0].min_amount;
+          var maxTime = result[3][0].max_time.toString();
+          maxTime = new Date(maxTime);
+          maxTime = `${maxTime.getFullYear()}-${maxTime.getMonth()+1>10?maxTime.getMonth()+1:'0'+(maxTime.getMonth()+1).toString()}-${maxTime.getDate()>10?maxTime.getDate():"0"+maxTime.getDate()}`;
+          var minTime = result[4][0].min_time.toString();
+          minTime = new Date(minTime);
+          minTime = `${minTime.getFullYear()}-${minTime.getMonth()+1}-${minTime.getDate()}`;
+        } catch(err) {
+          var maxTransaction = 1000;
+          var minTransaction = 0;
+          var maxTime = new Date();
+          maxTime = `${maxTime.getFullYear()}-${maxTime.getMonth()+1>10?maxTime.getMonth()+1:'0'+(maxTime.getMonth()+1).toString()}-${maxTime.getDate()>10?maxTime.getDate():"0"+maxTime.getDate()}`;
+          var minTime = new Date('1900-01-01');
+          minTime = `${minTime.getFullYear()}-${minTime.getMonth()+1}-${minTime.getDate()}`;
+        }
         res.render(path.join(__dirname, "views/transactions.ejs"), {username, lastLogin, transactions, maxTransaction, minTransaction, maxTime, minTime});
         
       });
