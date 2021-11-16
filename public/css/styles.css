@@ -790,7 +790,7 @@ a.article:hover {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 800px;
+	height: 85vh;
 }
 
 .sidebar-bottom p {
