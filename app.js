@@ -61,36 +61,8 @@ CREATE TABLE if not exists Transaction (
   FOREIGN KEY(from_account) REFERENCES Account(account_num),
   FOREIGN KEY(to_account) REFERENCES Account(account_num)
 );
-
-
 `;
 
-// INSERT INTO Account (account_num,account_type,currency,balance,customer_id) VALUES 
-// (23146103,"Savings","HKD",22500,64),
-// (61478042,"Current","HKD",7000,64),
-// (77009156,"Savings","USD",1000,64),
-// (35473887,"Current","USD",650,64),
-// (67642595,"Savings","HKD",30000,65),
-// (17947353,"Current","HKD",6500,65),
-// (80740049,"Savings","USD",1300,65),
-// (59737524,"Current","USD",1000,65),
-
-// (82266537,"Savings","HKD",18000,66),
-// (84304448,"Current","HKD",10000,66),
-// (72860997,"Savings","USD",2100,66),
-// (91438029,"Current","USD",1500,66);
-
-
-
-// INSERT INTO Transaction (amount,time,from_account,to_account) VALUES 
-// (500,"2021-11-14 00:00:00",0,619),
-// (1000,"2021-11-12 12:51:03",639,456),
-// (1500,"2021-11-15 07:01:02",619,0);
-// INSERT INTO Account (account_num,account_type,currency,balance,customer_id) VALUES 
-// (123,"Savings","HKD",15000,27),
-// (456,"Current","HKD",5000,27),
-// (789,"Savings","USD",900,27),
-// (000,"Current","USD",200,27);
 mysqlConnection.connect((err) => {
   if (!err) {
     console.log('Connection Established Successfully');
@@ -132,7 +104,6 @@ app.get('/face', (req, res) => {
   python.on('exit', function () {
     console.log("Result" + result);
     username = result.toLowerCase();
-    // console.log("Manjuy " +username)
     var getPass = `SELECT username, password FROM Customer WHERE username="${username}";`;
     console.log(getPass);
     mysqlConnection.query(getPass, function (err, result) {
@@ -172,7 +143,6 @@ app.get('/faceregister', (req, res) => {
     });
 
     python.on('exit', function () {
-      // console.log("Result" + result);
     });
 
     python.on('exit', () => { res.send("Finished capturing") });
@@ -252,7 +222,6 @@ app.get("/dashboard/:username", (req, res) => {
   var getUsername = `SELECT customer_id,name,last_login FROM Customer WHERE username="` + username + `";`;
   var name = "";
   var lastLogin = "";
-  // console.log(__dirname);
   mysqlConnection.query(getUsername, function (err, result) {
     if (!err) {
       name = result[0].name;
@@ -266,7 +235,6 @@ app.get("/dashboard/:username", (req, res) => {
           mysqlConnection.query(getTransaction, function (err, result) {
             if (!err) {
               var transactions = result;
-              // console.log(transactions);
               res.render(path.join(__dirname, "views/dashboard.ejs"), { username, name, lastLogin: lastLogin, accounts: accounts, transactions: transactions, dir: __dirname });
 
             }
@@ -297,7 +265,6 @@ app.get("/transactions/:username", (req, res) => {
       var minDateSQL = `SELECT MIN(time) AS min_time FROM Transaction WHERE from_account IN (SELECT account_num FROM Account WHERE customer_id ="${customer_id}") OR to_account IN (SELECT account_num FROM Account WHERE customer_id="${customer_id}") ORDER BY time desc;`;
       mysqlConnection.query(getTransactions + maxTransactionSQL + minTransactionSQL + maxDateSQL + minDateSQL, function (err, result) {
         var transactions = result[0];
-        // console.log(transactions);
         try {
           var maxTransaction = result[1][0].max_amount;
           var minTransaction = result[2][0].min_amount;
@@ -318,11 +285,6 @@ app.get("/transactions/:username", (req, res) => {
         res.render(path.join(__dirname, "views/transactions.ejs"), { username, lastLogin, transactions, maxTransaction, minTransaction, maxTime, minTime });
 
       });
-      // mysqlConnection.query(maxTransactionSQL, function(err, result) {
-      //   var maxTransaction = result;
-
-      // })
-
     }
     else
       console.log(err);
@@ -378,8 +340,6 @@ app.get("/pay/:username", (req, res) => {
 app.post("/pay/:username", function (req, res) {
   const { username } = req.params;
   const { fromAccount, toAccount, amount } = req.body;
-  // var customer_id ="";
-  // var accounts;
 
   mysqlConnection.query(`SELECT customer_id,last_login from Customer WHERE username="${username}";`, function (err, result) {
     if (!err) {
@@ -420,7 +380,6 @@ app.post("/pay/:username", function (req, res) {
                     });
                   }
                   else {
-                    alert("Transaction Failed");
                     console.log("Different currencies");
                     res.render(path.join(__dirname, "views/pay.ejs"), { username: username, accounts: accounts, lastLogin: lastLogin, alert: "Currency incompatible to complete transaction..." });
 
@@ -437,7 +396,6 @@ app.post("/pay/:username", function (req, res) {
 
 app.get("/password/:username", function (req, res) {
   const { username } = req.params;
-  // console.log(req.body);
   mysqlConnection.query(`SELECT last_login FROM Customer WHERE username="${username}";`, function (err, result) {
     if (!err) {
       var lastLogin = result[0].last_login;
